@@ -23,9 +23,9 @@ public class PlanoDeSaude {
 	}
 	
 	
-	/*
-	 * public String getDadosDoPlano() { return "Plano: " + this.operadora + ", " +
-	 * this.tipoDoPlano; }
-	 */
+	
+	  public String getDadosDoPlano() { return this.operadora + ", " +
+	  this.tipoDoPlano; }
+	 
 	
 }

@@ -10,6 +10,7 @@ public class Especialidade {
 		nome = novoNome;
 	}
 	
+	
 	public String getNome() {
 		return nome;
 	}

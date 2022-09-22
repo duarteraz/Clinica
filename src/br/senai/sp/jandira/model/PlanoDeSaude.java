@@ -5,27 +5,40 @@ public class PlanoDeSaude {
 	// Atributos
 	private String operadora;
 	private String tipoDoPlano;
-
-	// Métodos de acesso ( set e get )
-	public void setOperadora(String operadora) {
+	
+	//Construtor
+	public  PlanoDeSaude (String operadora) {
 		this.operadora = operadora;
 	}
-	public String getOperadora() {
-		return this.operadora;
-	}
 	
-	
-	public void setTipoDoPlano(String tipoDoPlano) {
+	public PlanoDeSaude (String operadora, String tipoDoPlano) {
+		this.operadora = operadora;
 		this.tipoDoPlano = tipoDoPlano;
 	}
-	public String getTipoDoPlano() {
-		return this.tipoDoPlano;
+	
+	public PlanoDeSaude() {
+		
 	}
-	
-	
 	
 	  public String getDadosDoPlano() { return this.operadora + ", " +
 	  this.tipoDoPlano; }
+
+	public String getOperadora() {
+		return operadora;
+	}
+
+	public void setOperadora(String operadora) {
+		this.operadora = operadora;
+	}
+
+	public String getTipoDoPlano() {
+		return tipoDoPlano;
+	}
+
+	public void setTipoDoPlano(String tipoDoPlano) {
+		this.tipoDoPlano = tipoDoPlano;
+	}
+	  
 	 
 	
 }

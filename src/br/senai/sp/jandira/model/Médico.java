@@ -8,7 +8,7 @@ public class Médico {
 	// Atributos 
 	private String nome;
 	private LocalDate dataDeNascimento;
-	private String sexo;
+	private Genero genero;
 	private Especialidade[] especialidades;
 	private String crm;
 	
@@ -28,12 +28,11 @@ public class Médico {
 		this.dataDeNascimento = dataDeNascimento;
 	}
 	
-	
-	public String getSexo() {
-		return sexo;
+	public Genero getGenero() {
+		return genero;
 	}
-	public void setSexo(String sexo) {
-		this.sexo = sexo;
+	public void setGenero(Genero genero) {
+		this.genero = genero;
 	}
 	
 	

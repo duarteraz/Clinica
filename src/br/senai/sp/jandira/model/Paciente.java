@@ -95,14 +95,7 @@ public class Paciente {
 		return estados;
 	}
 
-		
-	}
-	
-	// public String getDadosDosPacientes() { return this.nome + ", " + this.email + ", " +
-			//  this.planoDeSaude; }
-	
-	
-	
 
-	
 }
+
+

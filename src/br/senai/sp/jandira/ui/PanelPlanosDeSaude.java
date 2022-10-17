@@ -1,14 +1,18 @@
 package br.senai.sp.jandira.ui;
 
 import br.senai.sp.jandira.dao.PlanoDeSaudeDAO;
+import br.senai.sp.jandira.model.PlanoDeSaude;
+import br.senai.sp.jandira.model.TipoOperacao;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
 public class PanelPlanosDeSaude extends javax.swing.JPanel {
 
+    int linha;
+
     public PanelPlanosDeSaude() {
         initComponents();
-         criarTabelaPlanosDeSaude();
+        criarTabelaPlanosDeSaude();
     }
 
     @SuppressWarnings("unchecked")
@@ -75,7 +79,7 @@ public class PanelPlanosDeSaude extends javax.swing.JPanel {
 
         editar.setBackground(new java.awt.Color(102, 153, 255));
         editar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/imagem/contrato.png"))); // NOI18N
-        editar.setToolTipText("Editar");
+        editar.setToolTipText("Alterar");
         editar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 editarMouseClicked(evt);
@@ -161,23 +165,46 @@ public class PanelPlanosDeSaude extends javax.swing.JPanel {
 
     private void excluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirActionPerformed
 
-    int resposta = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir o plano selecionado?", JOptionPane.QUESTION_MESSAGE);
-                
-        int linha = tabPlanos.getSelectedRow();
-        
-        if (linha != -1 ) {
-            String codigoStr = tabPlanos.getValueAt(linha, 0).toString();
-            Integer codigo = Integer.valueOf(codigoStr);
-            PlanoDeSaudeDAO.excluir(codigo);
-            criarTabelaPlanosDeSaude();
-            
+        //Excluimos a linha selecionada
+        linha = tabPlanos.getSelectedRow();
+
+        // verificamo se a linha é diferente de -1
+        //-1 significa que o usuario nao selecionou nada
+        if (linha != -1) {
+            excluir();
+
         } else {
-            JOptionPane.showMessageDialog(this, "Selecione o plano que deseja excluir",
-                "Plano de saúde", JOptionPane.ERROR_MESSAGE);
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Selecione o plano que deseja excluir",
+                    "Plano de saúde",
+                    JOptionPane.ERROR_MESSAGE);
         }
-        
-         
+
     }//GEN-LAST:event_excluirActionPerformed
+    private void excluir() {
+
+        int resposta = JOptionPane.showConfirmDialog(
+                this,
+                "Tem certeza que deseja excluir o plano selecionado?",
+                "Plano de saúde",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+
+        if (resposta == 0) {
+
+            PlanoDeSaudeDAO.excluir(getCodigo());
+            criarTabelaPlanosDeSaude();
+
+        }
+
+    }
+
+    private Integer getCodigo() {
+        String codigoStr = tabPlanos.getValueAt(linha, 0).toString();
+        return Integer.valueOf(codigoStr);
+    }
 
     private void editarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editarMouseClicked
 
@@ -185,17 +212,56 @@ public class PanelPlanosDeSaude extends javax.swing.JPanel {
 
     private void editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarActionPerformed
 
+        linha = tabPlanos.getSelectedRow();
+
+        if (linha != -1) {
+            editar();
+
+        } else {
+            JOptionPane.showConfirmDialog(
+                    this,
+                    "Selecione um plano de saúde para editar",
+                    "Plano de saúde",
+                    JOptionPane.WARNING_MESSAGE
+            );
+
+        }
+
+        
     }//GEN-LAST:event_editarActionPerformed
+
+    private void editar() {
+
+        PlanoDeSaude planoDeSaude = PlanoDeSaudeDAO.getPlanoDeSaude(getCodigo());
+
+        DialogPlanosDeSaude dialogPlanosDeSaude
+                = new DialogPlanosDeSaude(
+                        null,
+                        true,
+                        TipoOperacao.ALTERAR,
+                        planoDeSaude);
+
+        dialogPlanosDeSaude.setVisible(true);
+
+    }
+
 
     private void adicionarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_adicionarMouseClicked
 
     }//GEN-LAST:event_adicionarMouseClicked
 
     private void adicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarActionPerformed
-      DialogPlanosDeSaude dialogPlanosDeSaude = new DialogPlanosDeSaude(null, true);
-      dialogPlanosDeSaude.setVisible(true);
-      
-      criarTabelaPlanosDeSaude();
+
+        DialogPlanosDeSaude dialogPlanosDeSaude
+                = new DialogPlanosDeSaude(
+                        null,
+                        true,
+                        TipoOperacao.ADICIONAR,
+                        null);
+
+        dialogPlanosDeSaude.setVisible(true);
+
+        criarTabelaPlanosDeSaude();
     }//GEN-LAST:event_adicionarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -226,4 +292,5 @@ public class PanelPlanosDeSaude extends javax.swing.JPanel {
         tabPlanos.setDefaultEditor(Object.class, null);
 
     }
+
 }

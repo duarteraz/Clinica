@@ -79,6 +79,15 @@ public class TesteDao {
 //		for (PlanoDeSaude planos : dao.listar()) {
 //			System.out.println(planos.getOperadora());
 //		}
+
+          //Testar o metodo getPlanoDeSaude() do Dao
+          PlanoDeSaude p = PlanoDeSaudeDAO.getPlanoDeSaude(102);
+          System.out.println("Código: " +  p.getCodigo());
+          System.out.println("Operadora: " +  p.getOperadora());
+          
+          int i = PlanoDeSaudeDAO.listar().indexOf(plano3);
+          System.out.println(i);
+
     }
 
 }

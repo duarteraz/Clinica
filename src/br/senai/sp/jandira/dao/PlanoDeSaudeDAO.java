@@ -24,15 +24,34 @@ public class PlanoDeSaudeDAO {
     public static void gravar(PlanoDeSaude planoDeSaude) {
         planos.add(planoDeSaude);
     }
+
+    public static boolean excluir(Integer codigo) {
+        for (PlanoDeSaude p : planos) {
+            if (p.getCodigo().equals(codigo)) {
+                planos.remove(p);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void atualizar (PlanoDeSaude planoDeSaude) {
+        for (PlanoDeSaude p : planos){
+             if (p.getCodigo().equals(planoDeSaude.getCodigo())){
+                 planos.set(planos.indexOf(p), planoDeSaude);
+                 break;
+             }
+        }       
+    }
     
-    public static  boolean excluir (Integer codigo) {
-   for (PlanoDeSaude p : planos) {
-       if (p.getCodigo().equals(codigo)) {
-           planos.remove(p);
-           return true;
-       }
-   }
-   return false;
+    public static PlanoDeSaude getPlanoDeSaude(Integer codigo) {
+        for (PlanoDeSaude p : planos) {
+            if (p.getCodigo().equals(codigo)) {
+                return p;
+            }
+        }
+
+        return null;
     }
 
     public static ArrayList<PlanoDeSaude> listar() {
@@ -68,7 +87,7 @@ public class PlanoDeSaudeDAO {
             dados[i][2] = p.getTipoDoPlano();
             i++;
         }
-        
+
         // Definir um vetor com os nomes das colunas da tabela
         String[] titulos = {" Código", " Operadora ", " Tipo do Plano  "};
 

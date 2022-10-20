@@ -22,13 +22,15 @@ public class DialogPlanosDeSaude extends javax.swing.JDialog {
         this.tipoOperacao = tipoOperacao;
         this.planoDeSaude = planoDeSaude;
 
-        // preencher os campos caso o tipo da alteracao for ALTERAR
+        // Preencher os campos, caso o tipo de operação for ALTERAR
         if (tipoOperacao == TipoOperacao.ALTERAR) {
-            peencherFormulario();
+            preencherFormulario();
         }
+
     }
 
-    private void peencherFormulario() {
+    private void preencherFormulario() {
+
         titulo.setText("Planos de Saúde - " + tipoOperacao);
         icone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/imagem/adicionar-ficheiro.png")));
         textCodigo.setText(planoDeSaude.getCodigo().toString());
@@ -162,25 +164,30 @@ public class DialogPlanosDeSaude extends javax.swing.JDialog {
         } else {
             atualizar();
         }
-        
-        
+
     }//GEN-LAST:event_buttonSalvarActionPerformed
 
-private void atualizar() {
-     
+    private void atualizar() {
         planoDeSaude.setOperadora(textOperadora.getText());
         planoDeSaude.setTipoDoPlano(textPlano.getText());
-        PlanoDeSaudeDAO.atualizar(planoDeSaude);
-        JOptionPane.showMessageDialog(
-                this, 
-                "Plano atualizado com sucesso!!", 
-                "Plano de Saúde", 
-                JOptionPane.INFORMATION_MESSAGE);
-  
-        
+
+        if (validarCadastro()) {
+
+            PlanoDeSaudeDAO.atualizar(planoDeSaude);
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Plano de saúde atualizado com sucesso!",
+                    "Plano de Saúde",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            dispose();
+
+        }
     }
-    
-    private void gravar () {
+
+    private void gravar() {
+        // Criar um objeto Plano de Saúde
         PlanoDeSaude planoDeSaude = new PlanoDeSaude();
         planoDeSaude.setOperadora(textOperadora.getText());
         planoDeSaude.setTipoDoPlano(textPlano.getText());
@@ -190,20 +197,22 @@ private void atualizar() {
 
             JOptionPane.showMessageDialog(
                     this,
-                    "Plano de Saude Gravado com sucesso",
-                    "Plano de Saude",
+                    "Plano de saúde gravado com sucesso!",
+                    "Plano de Saúde",
                     JOptionPane.INFORMATION_MESSAGE);
 
             dispose();
         }
     }
+
     private boolean validarCadastro() {
+
         if (textOperadora.getText().isEmpty()) {
 
             JOptionPane.showMessageDialog(
                     this,
-                    "Preencha o Nome da Operadora",
-                    "Plano de Saude",
+                    "Por favor preencha o nome da operadora!",
+                    "Plano de Saúde",
                     JOptionPane.ERROR_MESSAGE);
 
             textOperadora.requestFocus();
@@ -213,14 +222,21 @@ private void atualizar() {
         }
 
         if (textPlano.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Preencha oTipo do Plano",
-                    "Plano de Saude", JOptionPane.ERROR_MESSAGE);
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Por favor preencha o tipo do plano!",
+                    "Plano de Saúde",
+                    JOptionPane.ERROR_MESSAGE);
+
             textPlano.requestFocus();
 
             return false;
+
         }
 
         return true;
+
     }
 
     private void buttpnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttpnCancelarActionPerformed
@@ -241,8 +257,5 @@ private void atualizar() {
     private javax.swing.JTextField textPlano;
     private javax.swing.JLabel titulo;
     // End of variables declaration//GEN-END:variables
-
-   
-
 
 }

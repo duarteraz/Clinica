@@ -5,14 +5,39 @@ import java.util.ArrayList;
 public class Especialidade {
 
     // Atributo
+    private static int contador = 100;
+    private Integer codigo;
     private String nome;
     private String descricao;
-    private static int quantidade;
 
-    public Especialidade() {
-        quantidade++;
+    // Construtor 
+    private void atualizarCodigo() {
+        this.codigo = contador;
+        contador++;
     }
 
+    public Especialidade() {
+        atualizarCodigo();
+
+    }
+
+    public Especialidade(String nome) {
+        this.nome = nome;
+        atualizarCodigo();
+    }
+
+    public Especialidade(String nome, String descricao) {
+        this.nome = nome;
+        this.descricao = descricao;
+        atualizarCodigo();
+    }
+
+    public String getDadosEspecialidade() {
+        return this.nome + ", "
+                + this.descricao;
+    }
+
+    // Métodos 
     public String getDescricao() {
         return descricao;
     }
@@ -30,15 +55,23 @@ public class Especialidade {
         return nome;
     }
 
-    public void getQuantidade() {
+    public static int getContador() {
 
+        return contador;
+    }
+        public Integer getCodigo() {
+        return codigo;
     }
 
-    public void setQuantidade() {
-        quantidade++;
-    }
+ 
+    
 
 }
+
+
+
+
+
 
 // criar 3 especialidades, guardar as especialidades em uma ArrayList<> 
 //e exibir o nome das especilidades 

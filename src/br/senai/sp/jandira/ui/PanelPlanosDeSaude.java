@@ -227,7 +227,7 @@ public class PanelPlanosDeSaude extends javax.swing.JPanel {
 
         }
 
-        
+
     }//GEN-LAST:event_editarActionPerformed
 
     private void editar() {
@@ -242,6 +242,8 @@ public class PanelPlanosDeSaude extends javax.swing.JPanel {
                         planoDeSaude);
 
         dialogPlanosDeSaude.setVisible(true);
+        
+        criarTabelaPlanosDeSaude();
 
     }
 

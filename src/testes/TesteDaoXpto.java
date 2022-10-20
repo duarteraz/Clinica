@@ -9,7 +9,7 @@ public class TesteDaoXpto {
         TesteDao.main(args);
 
         //PlanoDeSaudeDAO dao = new PlanoDeSaudeDAO();
-        System.out.println(PlanoDeSaudeDAO.listar().size());
+        System.out.println(PlanoDeSaudeDAO.listarTodos().size());
 
     }
 

@@ -234,8 +234,7 @@ public class PanelPlanosDeSaude extends javax.swing.JPanel {
 
         PlanoDeSaude planoDeSaude = PlanoDeSaudeDAO.getPlanoDeSaude(getCodigo());
 
-        DialogPlanosDeSaude dialogPlanosDeSaude
-                = new DialogPlanosDeSaude(
+        DialogPlanosDeSaude dialogPlanosDeSaude = new DialogPlanosDeSaude(
                         null,
                         true,
                         TipoOperacao.ALTERAR,

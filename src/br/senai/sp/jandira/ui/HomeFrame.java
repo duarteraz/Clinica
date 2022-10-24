@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.ui;
 
+import br.senai.sp.jandira.dao.EspecialidadesDAO;
 import br.senai.sp.jandira.dao.PlanoDeSaudeDAO;
 import java.awt.Color;
 import javax.swing.JOptionPane;
@@ -10,6 +11,7 @@ public class HomeFrame extends javax.swing.JFrame {
     public HomeFrame() {
         initComponents();
         PlanoDeSaudeDAO.criarPlanosDeSaudeTeste();
+        EspecialidadesDAO.criarEspecialidade();
         initPanels();
 
     }

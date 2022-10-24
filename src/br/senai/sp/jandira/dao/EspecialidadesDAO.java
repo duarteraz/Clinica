@@ -56,20 +56,21 @@ public class EspecialidadesDAO {
         return especial;
     }
 
-    public static void criarPlanosDeSaudeTeste() {
-        Especialidade p1 = new Especialidade("Cardiologia", "Diagnóstico e tratamento de doenças do"
-                + " coração e sistema circulatório");
+    public static void criarEspecialidade() {
+        Especialidade p1 = new Especialidade("Cardiologia", 
+                "Doenças do coração e sistema circulatório");
 
-        Especialidade p2 = new Especialidade("Neurocirurgia", "Tratamentodoenças que atingem os sistemas nervosos central e periférico");
+        Especialidade p2 = new Especialidade("Neurocirurgia", 
+                "doenças que atingem os sistemas nervosos central e periférico");
 
-        Especialidade p3 = new Especialidade("Oftalmologia", "Cuidado dos aspectos da saúde"
-                + " dos olhos");
+        Especialidade p3 = new Especialidade("Oftalmologia", 
+                "Saúde dos olhos");
 
-        Especialidade p4 = new Especialidade("Psiquiatria", "prevenção, diagnóstico, tratamento "
-                + "e reabilitação de pessoas com distúrbios e transtornos mentais");
+        Especialidade p4 = new Especialidade("Psiquiatria",
+                "Distúrbios e transtornos mentais");
 
-        Especialidade p5 = new Especialidade("Urologia", " tratamento de doenças relacionadas ao"
-                + " aparelho urinário");
+        Especialidade p5 = new Especialidade("Urologia",
+ "Aparelho urinário");
 
         especial.add(p1);
         especial.add(p2);

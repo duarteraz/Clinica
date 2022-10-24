@@ -1,14 +1,18 @@
-
 package br.senai.sp.jandira.ui;
 
+import br.senai.sp.jandira.dao.EspecialidadesDAO;
+import br.senai.sp.jandira.model.Especialidade;
+import br.senai.sp.jandira.model.TipoOperacao;
 import javax.swing.JOptionPane;
-
+import javax.swing.JTable;
 
 public class PanelEspecialidades extends javax.swing.JPanel {
 
+    int linha;
 
     public PanelEspecialidades() {
         initComponents();
+        criarTabelaEspecialidades();
     }
 
     @SuppressWarnings("unchecked")
@@ -151,9 +155,35 @@ public class PanelEspecialidades extends javax.swing.JPanel {
     }//GEN-LAST:event_editarMouseClicked
 
     private void editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarActionPerformed
+        linha = tabEspecialidades.getSelectedRow();
+        if (linha != -1) {
+            editar();
+        } else {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Selecione qual especialidade você deseja editar!!",
+                    "Especialidades",
+                    JOptionPane.ERROR_MESSAGE);
+        }
 
- 
+
     }//GEN-LAST:event_editarActionPerformed
+
+    private void editar() {
+        Especialidade especialidade = EspecialidadesDAO.getDadosEspecialidade(getCodigo());
+
+        DialogEspecialidade dialogEspecialidade = new DialogEspecialidade(
+                        null,
+                        true,
+                        TipoOperacao.ALTERAR,
+                        especialidade);
+
+        dialogEspecialidade.setVisible(true);
+
+        criarTabelaEspecialidades();
+
+    }
+
 
     private void adicionarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_adicionarMouseClicked
 
@@ -161,7 +191,17 @@ public class PanelEspecialidades extends javax.swing.JPanel {
 
     private void adicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarActionPerformed
 
-  
+        DialogEspecialidade dialogEspecialidade
+                = new DialogEspecialidade(
+                        null,
+                        true,
+                        TipoOperacao.ADICIONAR,
+                        null);
+
+        dialogEspecialidade.setVisible(true);
+
+        criarTabelaEspecialidades();
+
     }//GEN-LAST:event_adicionarActionPerformed
 
     private void excluirComponentRemoved(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_excluirComponentRemoved
@@ -178,9 +218,41 @@ public class PanelEspecialidades extends javax.swing.JPanel {
 
     private void excluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirActionPerformed
 
+        linha = tabEspecialidades.getSelectedRow();
+        if (linha != -1) {
+            excluir();
+        } else {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Selecione qual especialidade você deseja excluir!!",
+                    "Especialidades",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
 
     }//GEN-LAST:event_excluirActionPerformed
+    private void excluir() {
 
+        int resposta = JOptionPane.showConfirmDialog(
+                this,
+                "Tem certeza que deseja excluir a especialidade selecionada?",
+                "Especialidades",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+
+        if (resposta == 0) {
+
+            EspecialidadesDAO.excluir(getCodigo());
+            criarTabelaEspecialidades();
+
+        }
+
+    }
+
+    private Integer getCodigo() {
+        String codigoStr = tabEspecialidades.getValueAt(linha, 0).toString();
+        return Integer.valueOf(codigoStr);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel TabelaEspecialidades;
@@ -190,4 +262,21 @@ public class PanelEspecialidades extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabEspecialidades;
     // End of variables declaration//GEN-END:variables
+
+    private void criarTabelaEspecialidades() {
+        tabEspecialidades.setModel(EspecialidadesDAO.getTableModel());
+
+        // Desativar o Rendimensionar
+        tabEspecialidades.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+        // Largura das colunas
+        tabEspecialidades.getColumnModel().getColumn(0).setPreferredWidth(100);
+        tabEspecialidades.getColumnModel().getColumn(1).setPreferredWidth(309);
+        tabEspecialidades.getColumnModel().getColumn(2).setPreferredWidth(310);
+
+        // Impedindo a movimentação de colunas e 
+        //alteração das células
+        tabEspecialidades.getTableHeader().setReorderingAllowed(false);
+        tabEspecialidades.setDefaultEditor(Object.class, null);
+    }
 }

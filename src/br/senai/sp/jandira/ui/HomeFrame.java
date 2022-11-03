@@ -10,8 +10,8 @@ public class HomeFrame extends javax.swing.JFrame {
 
     public HomeFrame() {
         initComponents();
-        PlanoDeSaudeDAO.criarPlanosDeSaudeTeste();
-        EspecialidadesDAO.criarEspecialidade();
+        PlanoDeSaudeDAO.getListarPlanosDeSaude();
+        EspecialidadesDAO.getEspecialidades();
         initPanels();
 
     }
@@ -163,21 +163,12 @@ public class HomeFrame extends javax.swing.JFrame {
         buttonSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/imagem/calcular.png"))); // NOI18N
         buttonSair.setText("Sair");
         buttonSair.setToolTipText("Sair");
-        buttonSair.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-                buttonSairAncestorMoved(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-        });
         buttonSair.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                buttonSairMouseClicked(evt);
-            }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 buttonSairMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                buttonSairMousePressed(evt);
             }
         });
         buttonSair.addActionListener(new java.awt.event.ActionListener() {
@@ -231,7 +222,7 @@ public class HomeFrame extends javax.swing.JFrame {
 
         jLabel3.setText("suporte@sisacon.com.br");
         PainelHome.add(jLabel3);
-        jLabel3.setBounds(130, 190, 140, 40);
+        jLabel3.setBounds(130, 190, 150, 40);
 
         jLabel4.setText("(11) 95555-5555");
         PainelHome.add(jLabel4);
@@ -267,7 +258,7 @@ public class HomeFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonAgendaActionPerformed
 
     private void buttonSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSairActionPerformed
-
+        dispose();
     }//GEN-LAST:event_buttonSairActionPerformed
 
     private void buttonPlanoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPlanoActionPerformed
@@ -282,14 +273,6 @@ public class HomeFrame extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_buttonPlanoActionPerformed
-
-    private void buttonSairAncestorMoved(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_buttonSairAncestorMoved
-
-    }//GEN-LAST:event_buttonSairAncestorMoved
-
-    private void buttonSairMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonSairMouseClicked
-
-    }//GEN-LAST:event_buttonSairMouseClicked
 
     private void buttonAgendaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonAgendaMouseClicked
 
@@ -336,14 +319,10 @@ public class HomeFrame extends javax.swing.JFrame {
         buttonEspecialidade.setBackground(new java.awt.Color(255, 51, 204));
     }//GEN-LAST:event_buttonEspecialidadeActionPerformed
 
-    public static void main(String args[]) {
+    private void buttonSairMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonSairMousePressed
+ 
+    }//GEN-LAST:event_buttonSairMousePressed
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new HomeFrame().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PainelHome;

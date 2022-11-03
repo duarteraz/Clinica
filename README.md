@@ -1,3 +1,0 @@
-# Clinica
-# Clinica
-# ClinicaApp

@@ -2,13 +2,27 @@ package br.senai.sp.jandira.dao;
 
 import br.senai.sp.jandira.model.Especialidade;
 import br.senai.sp.jandira.model.PlanoDeSaude;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class EspecialidadesDAO {
 
     private Especialidade especialidades;
     private static ArrayList<Especialidade> especial = new ArrayList<>();
+
+    private static final String ARQUIVO = "C:\\Users\\22282117\\Especialidade.txt";
+    private static final Path PATH = Paths.get(ARQUIVO);
+    private static final String ARQUIVO_TEMP = "C:\\Users\\22282117\\Especialidade_Temp.txt";
+    private static final Path PATH_TEMP = Paths.get(ARQUIVO_TEMP);
 
     public EspecialidadesDAO(Especialidade especialidades) {
         this.especial.add(especialidades);
@@ -20,16 +34,83 @@ public class EspecialidadesDAO {
 
     public static void gravar(Especialidade especialidades) {
         especial.add(especialidades);
+
+        try {
+            BufferedWriter bw;
+            bw = Files.newBufferedWriter(
+                    PATH,
+                    StandardOpenOption.APPEND,
+                    StandardOpenOption.WRITE);
+
+            String novaEspecialidade = especialidades.getEspecialidadePorPontoEVirgula();
+
+            bw.write(novaEspecialidade);
+            bw.newLine();
+            bw.close();
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Houve um erro ao gravar",
+                    "Erro ao gravar",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public static boolean excluir(Integer codigo) {
         for (Especialidade p : especial) {
             if (p.getCodigo().equals(codigo)) {
                 especial.remove(p);
-                return true;
+                break;
             }
         }
+
+        atualizarArquivo();
         return false;
+    }
+
+    private static void atualizarArquivo() {
+        // Reconstruir um arquivo atualizado ou seja, sem o plano removido      
+        // Passo 01 ---> Criar uma representação dos arquivos manipulado
+        File arquivoAtual = new File(ARQUIVO);
+        File arquivoTemp = new File(ARQUIVO_TEMP);
+
+        try {
+            //          boolean criou =  arquivoTemp.createNewFile();
+            //            System.out.println(criou);
+
+            //criar o arquivo temporario para a escrita
+            arquivoTemp.createNewFile();
+
+            // abrir o arquivo temporario para a escrita
+            BufferedWriter bwTemp = Files.newBufferedWriter(
+                    PATH_TEMP,
+                    StandardOpenOption.APPEND,
+                    StandardOpenOption.WRITE);
+
+            // interar na lista para adicionar os planos no arquivo
+            for (Especialidade p : especial) {
+                bwTemp.write(p.getEspecialidadePorPontoEVirgula());
+                bwTemp.newLine();
+            }
+
+            //fechar o arquivo temporario 
+            bwTemp.close();
+
+            // excluir o arquivo atual - planoDeSaude.txt
+            arquivoAtual.delete();
+
+            //Renomear o arquivoTemp
+            arquivoTemp.renameTo(arquivoAtual);
+
+        } catch (IOException ex) {
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Ocorreu um erro ao criar o arquivo!",
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public static Especialidade getDadosEspecialidade(Integer codigo) {
@@ -50,33 +131,42 @@ public class EspecialidadesDAO {
                 break;
             }
         }
+
+        atualizarArquivo();;
     }
 
     public static ArrayList<Especialidade> listarTodos() {
         return especial;
     }
 
-    public static void criarEspecialidade() {
-        Especialidade p1 = new Especialidade("Cardiologia", 
-                "Doenças do coração e sistema circulatório");
+    public static void getEspecialidades() {
+        try {
+            BufferedReader br = Files.newBufferedReader(PATH);
 
-        Especialidade p2 = new Especialidade("Neurocirurgia", 
-                "doenças que atingem os sistemas nervosos central e periférico");
+            String linha = br.readLine();
 
-        Especialidade p3 = new Especialidade("Oftalmologia", 
-                "Saúde dos olhos");
+            while (linha != null && !linha.isEmpty()) {
+                String[] linhaVetor = linha.split(";");
+                Especialidade novaEspecialidade;
+                novaEspecialidade = new Especialidade(
+                        Integer.valueOf(linhaVetor[0]),
+                        linhaVetor[1],
+                        linhaVetor[2]);
 
-        Especialidade p4 = new Especialidade("Psiquiatria",
-                "Distúrbios e transtornos mentais");
+                especial.add(novaEspecialidade);
+                linha = br.readLine();
 
-        Especialidade p5 = new Especialidade("Urologia",
- "Aparelho urinário");
+            }
 
-        especial.add(p1);
-        especial.add(p2);
-        especial.add(p3);
-        especial.add(p4);
-        especial.add(p5);
+            br.close();
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Houve um erro ao gravar",
+                    "Erro ao gravar",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public static DefaultTableModel getTableModel() {
@@ -94,10 +184,10 @@ public class EspecialidadesDAO {
             dados[i][2] = p.getDescricao();
             i++;
         }
-      
-                // Definir um vetor com os nomes das colulas da tabela
+
+        // Definir um vetor com os nomes das colulas da tabela
         String[] titulos = {"Código", "Nome da Especialidade", "Descrição da Especialidade"};
-        
+
         // Criar o modelo que será utilizado pela JTable 
         // para exibir os dados dos planos
         DefaultTableModel tableModel = new DefaultTableModel(dados, titulos);
@@ -105,4 +195,4 @@ public class EspecialidadesDAO {
         return tableModel;
 
     }
-    }
+}

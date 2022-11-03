@@ -11,9 +11,18 @@ public class Especialidade {
     private String descricao;
 
     // Construtor 
+     public Especialidade (Integer codigo, String nome, String descricao) {
+        this.codigo = codigo;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.contador = this.codigo;
+    }
+    
+    
     private void atualizarCodigo() {
-        this.codigo = contador;
         contador++;
+        this.codigo = contador;
+       
     }
 
     public Especialidade() {
@@ -61,6 +70,11 @@ public class Especialidade {
     }
         public Integer getCodigo() {
         return codigo;
+    }
+        
+           public String getEspecialidadePorPontoEVirgula () {
+        String EspecialidadeStr = this .codigo + ";" + this.nome + ";" + this.descricao;
+        return EspecialidadeStr;
     }
 
  

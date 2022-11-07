@@ -8,7 +8,7 @@ public class Agenda {
     //atributos
     private Paciente paciente;
     private Especialidade especialidade;
-    private Médico médico;
+    private Medico médico;
     private LocalDate dataDaConsulta;
     private LocalTime horarioDaConsulta;
     private String observacao;
@@ -31,11 +31,11 @@ public class Agenda {
         this.especialidade = especialidade;
     }
 
-    public Médico getMédico() {
+    public Medico getMédico() {
         return médico;
     }
 
-    public void setMédico(Médico médico) {
+    public void setMédico(Medico médico) {
         this.médico = médico;
     }
 

@@ -28,7 +28,7 @@ public class DialogEspecialidade extends javax.swing.JDialog {
 
     private void preencherFormulario() {
 
-        labelTitulo.setText("Planos de Saúde - " + tipoOperacao);
+        labelTitulo.setText("Especialidade - " + tipoOperacao);
         labelIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/imagem/adicionar-ficheiro.png")));
         textCodigo.setText(especialidade.getCodigo().toString());
         textNome.setText(especialidade.getNome());

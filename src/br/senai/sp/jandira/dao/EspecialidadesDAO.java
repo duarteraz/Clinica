@@ -139,7 +139,7 @@ public class EspecialidadesDAO {
         return especial;
     }
 
-    public static void getEspecialidades() {
+    public static void getListarEspecialidades() {
         try {
             BufferedReader br = Files.newBufferedReader(PATH);
 

@@ -222,7 +222,7 @@ public class PanelPlanosDeSaude extends javax.swing.JPanel {
                     this,
                     "Selecione um plano de saúde para editar",
                     "Plano de saúde",
-                    JOptionPane.WARNING_MESSAGE
+                    JOptionPane.ERROR_MESSAGE
             );
 
         }

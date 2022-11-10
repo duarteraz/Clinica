@@ -8,7 +8,6 @@ public class Pessoa {
     private String email;
     private String telefone;
     private LocalDate dataDeNascimento;
-    
 
     public String getNome() {
         return nome;
@@ -41,7 +40,10 @@ public class Pessoa {
     public void setDataDeNascimento(LocalDate dataDeNascimento) {
         this.dataDeNascimento = dataDeNascimento;
     }
-    
-    
 
+//    public String getPessoaSeparadoPorPontoEVirgula() {
+//        String PessoaStr = this.nome + ";" + this.email + ";" + this.telefone + ";" + this.dataDeNascimento;
+//        return PessoaStr;
+//}
+    
 }

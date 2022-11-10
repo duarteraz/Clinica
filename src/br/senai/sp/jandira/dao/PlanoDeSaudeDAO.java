@@ -54,7 +54,7 @@ public class PlanoDeSaudeDAO { // Simular nosso banco de dados
         } catch (IOException e) {
             JOptionPane.showMessageDialog(
                     null,
-                    "Houve um erro ao gravar",
+                    "Houve um erro ao gravar plano",
                     "Erro ao gravar",
                     JOptionPane.ERROR_MESSAGE);
         }

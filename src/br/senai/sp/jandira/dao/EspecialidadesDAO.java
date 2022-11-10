@@ -51,7 +51,7 @@ public class EspecialidadesDAO {
         } catch (IOException e) {
             JOptionPane.showMessageDialog(
                     null,
-                    "Houve um erro ao gravar",
+                    "Houve um erro ao gravar especialidade",
                     "Erro ao gravar",
                     JOptionPane.ERROR_MESSAGE);
         }

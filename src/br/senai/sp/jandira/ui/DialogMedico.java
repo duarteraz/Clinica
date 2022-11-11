@@ -4,6 +4,7 @@ import br.senai.sp.jandira.dao.MedicoDAO;
 import br.senai.sp.jandira.model.Medico;
 import br.senai.sp.jandira.model.TipoOperacao;
 import java.time.format.DateTimeFormatter;
+import javax.swing.Icon;
 import javax.swing.JOptionPane;
 
 public class DialogMedico extends javax.swing.JDialog {
@@ -16,26 +17,31 @@ public class DialogMedico extends javax.swing.JDialog {
             TipoOperacao tipoOperacao,
             Medico medico) {
 
-        super(parent, modal);
+       
+
+       super(parent, modal);
         initComponents();
         this.tipoOperacao = tipoOperacao;
         this.medico = medico;
 
-        if (tipoOperacao == TipoOperacao.ALTERAR) {
+        // Preencher os campos, caso o tipo de operação for ALTERAR
+        if (tipoOperacao == tipoOperacao.ALTERAR) {
             preencherFormulario();
         }
+
     }
 
     private void preencherFormulario() {
-
-        titulo.setText("Médico - " + tipoOperacao);
-        icone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/imagem/medico.png")));
+        titulo.setText("Especialidade - " + tipoOperacao);
+        icone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/img/edit.png")));
         textCodigo.setText(medico.getCodigo().toString());
-        textCrm.setText(medico.getCrm().toString());
-        textDataDeNascimento.setText(medico.getDataDeNascimento().format(DateTimeFormatter.BASIC_ISO_DATE));
+        textNomeMedico.setText(medico.getNome());
+        textCrm.setText(medico.getCrm());
+        textDataDeNascimento.setText(medico.getDataNascimento().toString());
         textEmail.setText(medico.getEmail());
         textTelefone.setText(medico.getTelefone());
     }
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -245,7 +251,7 @@ public class DialogMedico extends javax.swing.JDialog {
     private void atualizar() {
         medico.setNome(textNomeMedico.getText());
         medico.setCrm(textCrm.getText());
-      
+
         medico.setCrm(textCrm.getText());
 
         if (validarCadastro()) {

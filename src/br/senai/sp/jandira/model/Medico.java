@@ -58,4 +58,8 @@ public class Medico extends Pessoa {
         return MedicoStr;
     }
 
+    public Object getDataNascimento() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

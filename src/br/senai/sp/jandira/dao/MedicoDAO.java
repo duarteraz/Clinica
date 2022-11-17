@@ -1,12 +1,10 @@
 package br.senai.sp.jandira.dao;
 
-import br.senai.sp.jandira.model.Especialidade;
 import br.senai.sp.jandira.model.Medico;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.lang.System.Logger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,58 +15,55 @@ import javax.swing.table.DefaultTableModel;
 
 public class MedicoDAO {
 
-    private Medico medicos;
-    private static ArrayList<Medico> med = new ArrayList<>();
+    private Medico medico;
+    private static ArrayList<Medico> medicoList = new ArrayList<>();
 
-    private static final String ARQUIVO = "C:\\Users\\22282117\\Medico.txt";
-    private static final String ARQUIVO_TEMP = "C:\\Users\\22282117\\Medico_temp.txt";
+    private static final String ARQUIVO = "C:\\Users\\22282117\\projeto\\medico.txt";
+    private static final String ARQUIVO_TEMP = "C:\\Users\\22282117\\projeto\\medico_temp.txt";
     private static final Path PATH = Paths.get(ARQUIVO);
     private static final Path PATH_TEMP = Paths.get(ARQUIVO_TEMP);
 
-    public MedicoDAO(Medico medicos) {
-        this.med.add(medicos);
+    public MedicoDAO(Medico medico) {
+        this.medicoList.add(medico);
     }
 
     public MedicoDAO() {
 
     }
 
-    public static void gravar(Medico medicos) {
-        med.add(medicos);
+    public static void gravar(Medico medico) {
+        medicoList.add(medico);
 
         try {
-            BufferedWriter bw;
-            bw = Files.newBufferedWriter(
-                    PATH,
+
+            BufferedWriter bw = Files.newBufferedWriter(PATH,
                     StandardOpenOption.APPEND,
                     StandardOpenOption.WRITE);
 
-            String novoMedico = medicos.getMedicoSeparadoPorPontoEVirgula();
-
-            bw.write(novoMedico);
+            bw.write(medico.getMedicoSeparadoPorPontoEVirgula());
             bw.newLine();
             bw.close();
 
-        } catch (IOException e) {
+        } catch (IOException ex) {
             JOptionPane.showMessageDialog(
                     null,
-                    "Houve um erro ao gravar medico",
+                    "Ocorreu um erro ao gravar.\n\nEntre em contato com o suporte",
                     "Erro ao gravar",
                     JOptionPane.ERROR_MESSAGE);
         }
-
     }
 
     public static boolean excluir(Integer codigo) {
-        for (Medico p : med) {
-            if (p.getCodigo().equals(codigo)) {
-                med.remove(p);
+        for (Medico m : medicoList) {
+            if (m.getCodigo().equals(codigo)) {
+                medicoList.remove(m);
                 break;
             }
         }
-        atualizarArquivo();
-        return false;
 
+        atualizarArquivo();
+
+        return false;
     }
 
     private static void atualizarArquivo() {
@@ -85,43 +80,42 @@ public class MedicoDAO {
                     StandardOpenOption.APPEND,
                     StandardOpenOption.WRITE);
 
-            for (Medico p : med) {
-                bwTemp.write(p.getMedicoSeparadoPorPontoEVirgula());
+            for (Medico m : medicoList) {
+                bwTemp.write(m.getMedicoSeparadoPorPontoEVirgula());
                 bwTemp.newLine();
             }
 
             bwTemp.close();
 
+
             arquivoAtual.delete();
+
 
             arquivoTemp.renameTo(arquivoAtual);
 
         } catch (IOException ex) {
-
-            JOptionPane.showMessageDialog(
+            JOptionPane.showConfirmDialog(
                     null,
-                    "Ocorreu um erro ao criar o arquivo!",
+                    "Ocorreu um erro ao criar o arquivo",
                     "Erro",
                     JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
         }
     }
 
-     public static Medico getMedico(Integer codigo) {
-
-        for (Medico p : med) {
-            if (p.getCodigo().equals(codigo)) {
-                return p;
+    public static Medico getMedico(Integer codigo) {
+        for (Medico m : medicoList) {
+            if (m.getCodigo().equals(codigo)) {
+                return m;
             }
         }
-
         return null;
     }
 
-
- public static void atualizar(Medico medicos) {
-        for (Medico p : med) {
-            if (p.getCodigo().equals(medicos.getCodigo())) {
-                med.set(med.indexOf(p), medicos);
+    public static void atualizar(Medico medico) {
+        for (Medico m : medicoList) {
+            if (m.getCodigo().equals(medico.getCodigo())) {
+                medicoList.set(medicoList.indexOf(m), medico);
                 break;
             }
         }
@@ -129,59 +123,56 @@ public class MedicoDAO {
     }
 
     public static ArrayList<Medico> listarTodos() {
-        return med;
+        return medicoList;
     }
 
-    public static void getListarMedicos() {
+    public static void getListaMedicos() {
+
         try {
+
             BufferedReader br = Files.newBufferedReader(PATH);
 
             String linha = br.readLine();
 
             while (linha != null && !linha.isEmpty()) {
                 String[] linhaVetor = linha.split(";");
-                Medico novoMedico;
-                novoMedico = new Medico(
+                Medico novoMedico = new Medico(
                         Integer.valueOf(linhaVetor[0]),
                         linhaVetor[1],
                         linhaVetor[2]);
 
-                med.add(novoMedico);
-                linha = br.readLine();
+                medicoList.add(novoMedico);
 
+                linha = br.readLine();
             }
 
             br.close();
 
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(
+        } catch (IOException ex) {
+            JOptionPane.showConfirmDialog(
                     null,
-                    "Houve um erro ao gravar medico",
-                    "Erro ao gravar",
+                    "Ocorreu um erro ao abrir o arquivo",
+                    "Erro de leitura",
                     JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
         }
     }
 
     public static DefaultTableModel getTableModel() {
+        Object[][] dados = new Object[medicoList.size()][3];
 
-
-        Object[][] dados = new Object[med.size()][3];
-
-      
         int i = 0;
-        for (Medico p : med) {
-            dados[i][0] = p.getCodigo();
-            dados[i][1] = p.getNome();
-            dados[i][2] = p.getTelefone();
+        for (Medico m : medicoList) {
+            dados[i][0] = m.getCodigo();
+            dados[i][1] = m.getNome();
+            dados[i][2] = m.getTelefone();
             i++;
         }
 
-        String[] titulos = {"Código", "Nome do(a) Médico(a)", "Telefone"};
+        String[] titulos = {"Código", "Nome", "Telefone"};
 
-       
         DefaultTableModel tableModel = new DefaultTableModel(dados, titulos);
-
         return tableModel;
-
     }
+
 }

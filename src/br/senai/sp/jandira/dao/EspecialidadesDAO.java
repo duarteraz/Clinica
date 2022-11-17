@@ -19,9 +19,9 @@ public class EspecialidadesDAO {
     private Especialidade especialidades;
     private static ArrayList<Especialidade> especial = new ArrayList<>();
 
-    private static final String ARQUIVO = "C:\\Users\\22282117\\Especialidade.txt";
+    private static final String ARQUIVO = "C:\\Users\\22282117\\projeto\\Especialidade.txt";
     private static final Path PATH = Paths.get(ARQUIVO);
-    private static final String ARQUIVO_TEMP = "C:\\Users\\22282117\\Especialidade_Temp.txt";
+    private static final String ARQUIVO_TEMP = "C:\\Users\\22282117\\projeto\\Especialidade_Temp.txt";
     private static final Path PATH_TEMP = Paths.get(ARQUIVO_TEMP);
 
     public EspecialidadesDAO(Especialidade especialidades) {
@@ -115,9 +115,9 @@ public class EspecialidadesDAO {
 
     public static Especialidade getDadosEspecialidade(Integer codigo) {
 
-        for (Especialidade p : especial) {
-            if (p.getCodigo().equals(codigo)) {
-                return p;
+        for (Especialidade especialidades : especial) {
+            if (especialidades.getCodigo().equals(codigo)) {
+                return especialidades;
             }
         }
 
@@ -133,6 +133,15 @@ public class EspecialidadesDAO {
         }
 
         atualizarArquivo();;
+    }
+    
+    public static Especialidade getEspecialidade(Integer codigo) {
+        for (Especialidade especialidade: especial) {
+            if (especialidade.getCodigo().equals(codigo)) {
+                return especialidade;
+            }
+        }
+        return null;
     }
 
     public static ArrayList<Especialidade> listarTodos() {

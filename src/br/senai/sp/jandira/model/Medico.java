@@ -4,39 +4,28 @@ import java.util.ArrayList;
 
 public class Medico extends Pessoa {
 
-    public Medico(Integer valueOf, String par, String par1) {
-    }
-
-    // Atributos 
     private static int contador = 100;
-    private Integer codigo;
-    private ArrayList<Especialidade> especialidades;
     private String crm;
-
-    public Medico() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    // Métodos
-    private void atualizarCodigo() {
-        contador++;
-        this.codigo = contador;
-    }
-
-    public static int getContador() {
-        return contador;
-    }
-
-    public Integer getCodigo() {
-        return codigo;
-    }
-
-    public ArrayList<Especialidade> getEspecialidades() {
+    private ArrayList<Especialidade> especialidades;
+    private Integer codigo;
+    
+    public ArrayList<Especialidade> getEspecialidade() {
         return especialidades;
     }
 
-    public void setEspecialidades(ArrayList<Especialidade> especialidades) {
-        this.especialidades = especialidades;
+    public Medico() {
+        atualizarCodigo();
+    }
+    
+    public Medico(Integer codigo, String nome, String telefone) {
+        this.codigo = codigo;
+        super.getNome();
+        super.getTelefone();
+        this.contador = this.codigo;
+    }
+    
+    public void setEspecialidade(ArrayList<Especialidade> especialidade) {
+        this.especialidades = especialidade;
     }
 
     public String getCrm() {
@@ -47,19 +36,21 @@ public class Medico extends Pessoa {
         this.crm = crm;
     }
 
-    public String getMedicoSeparadoPorPontoEVirgula() {
-        String MedicoStr = this.codigo + ";"
-                + this.crm + ";"
-                + this.especialidades + ";"
-                + this.getNome() + ";"
-                + this.getTelefone() + ";"
-                + this.getEmail();
-
-        return MedicoStr;
+    public static int getContador() {
+        return contador;
     }
 
-    public Object getDataNascimento() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    private void atualizarCodigo() {
+        contador++;
+        this.codigo = contador;
+    }
+    
+    public Integer getCodigo() {
+        return codigo;
+    }
+
+    public String getMedicoSeparadoPorPontoEVirgula() {
+        return this.codigo + ";" + getNome() + ";" + getTelefone();
     }
 
 }

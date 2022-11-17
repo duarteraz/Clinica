@@ -1,10 +1,8 @@
 package br.senai.sp.jandira.ui;
 
 import br.senai.sp.jandira.dao.MedicoDAO;
-import br.senai.sp.jandira.model.Medico;
 import br.senai.sp.jandira.model.TipoOperacao;
-import java.time.format.DateTimeFormatter;
-import javax.swing.Icon;
+import br.senai.sp.jandira.model.Medico;
 import javax.swing.JOptionPane;
 
 public class DialogMedico extends javax.swing.JDialog {
@@ -17,33 +15,24 @@ public class DialogMedico extends javax.swing.JDialog {
             TipoOperacao tipoOperacao,
             Medico medico) {
 
-       
-
-       super(parent, modal);
+        super(parent, modal);
         initComponents();
         this.tipoOperacao = tipoOperacao;
         this.medico = medico;
-
-        // Preencher os campos, caso o tipo de operação for ALTERAR
-        if (tipoOperacao == tipoOperacao.ALTERAR) {
+        if (tipoOperacao == TipoOperacao.ALTERAR) {
             preencherFormulario();
         }
-
     }
 
     private void preencherFormulario() {
-        titulo.setText("Especialidade - " + tipoOperacao);
-        icone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/img/edit.png")));
+        titulo.setText("Médico - " + tipoOperacao);
+        icone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/imagem/medico.png")));
         textCodigo.setText(medico.getCodigo().toString());
         textNomeMedico.setText(medico.getNome());
-        textCrm.setText(medico.getCrm());
-        textDataDeNascimento.setText(medico.getDataNascimento().toString());
-        textEmail.setText(medico.getEmail());
         textTelefone.setText(medico.getTelefone());
     }
 
-
-    @SuppressWarnings("unchecked")
+        @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -62,7 +51,7 @@ public class DialogMedico extends javax.swing.JDialog {
         jLabel7 = new javax.swing.JLabel();
         textEmail = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        textDataDeNascimento = new javax.swing.JTextField();
+        textDataNascimento = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         especialidades2 = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -165,13 +154,13 @@ public class DialogMedico extends javax.swing.JDialog {
         labelFicha.add(jLabel8);
         jLabel8.setBounds(420, 120, 140, 16);
 
-        textDataDeNascimento.addActionListener(new java.awt.event.ActionListener() {
+        textDataNascimento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textDataDeNascimentoActionPerformed(evt);
+                textDataNascimentoActionPerformed(evt);
             }
         });
-        labelFicha.add(textDataDeNascimento);
-        textDataDeNascimento.setBounds(420, 140, 140, 22);
+        labelFicha.add(textDataNascimento);
+        textDataNascimento.setBounds(420, 140, 140, 22);
 
         jScrollPane1.setViewportView(especialidades2);
 
@@ -186,6 +175,11 @@ public class DialogMedico extends javax.swing.JDialog {
         buttonEsquerda.setBackground(new java.awt.Color(102, 153, 255));
         buttonEsquerda.setFont(new java.awt.Font("Playbill", 1, 24)); // NOI18N
         buttonEsquerda.setText("<<");
+        buttonEsquerda.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                buttonEsquerdaMouseReleased(evt);
+            }
+        });
         buttonEsquerda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonEsquerdaActionPerformed(evt);
@@ -197,6 +191,16 @@ public class DialogMedico extends javax.swing.JDialog {
         buttonDireita.setBackground(new java.awt.Color(102, 153, 255));
         buttonDireita.setFont(new java.awt.Font("Playbill", 1, 24)); // NOI18N
         buttonDireita.setText(">>");
+        buttonDireita.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                buttonDireitaMouseReleased(evt);
+            }
+        });
+        buttonDireita.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonDireitaActionPerformed(evt);
+            }
+        });
         labelFicha.add(buttonDireita);
         buttonDireita.setBounds(170, 200, 60, 50);
 
@@ -225,28 +229,27 @@ public class DialogMedico extends javax.swing.JDialog {
         getContentPane().add(buttonCancelar);
         buttonCancelar.setBounds(690, 450, 50, 50);
 
-        pack();
+        setBounds(0, 0, 827, 530);
     }// </editor-fold>//GEN-END:initComponents
 
     private void textCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textCodigoActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_textCodigoActionPerformed
 
     private void textNomeMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textNomeMedicoActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_textNomeMedicoActionPerformed
 
     private void textCrmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textCrmActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_textCrmActionPerformed
 
     private void buttonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSalvarActionPerformed
-        if (tipoOperacao == TipoOperacao.ADICIONAR) {
+        if (tipoOperacao == tipoOperacao.ADICIONAR) {
             gravar();
         } else {
             atualizar();
         }
-
     }//GEN-LAST:event_buttonSalvarActionPerformed
     private void atualizar() {
         medico.setNome(textNomeMedico.getText());
@@ -347,7 +350,7 @@ public class DialogMedico extends javax.swing.JDialog {
 
         }
 
-        if (textDataDeNascimento.getText().isEmpty()) {
+        if (textDataNascimento.getText().isEmpty()) {
 
             JOptionPane.showMessageDialog(
                     this,
@@ -355,7 +358,7 @@ public class DialogMedico extends javax.swing.JDialog {
                     "Médico",
                     JOptionPane.ERROR_MESSAGE);
 
-            textDataDeNascimento.requestFocus();
+            textDataNascimento.requestFocus();
 
             return false;
 
@@ -368,21 +371,35 @@ public class DialogMedico extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_buttonCancelarActionPerformed
 
+
     private void textTelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textTelefoneActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_textTelefoneActionPerformed
 
     private void textEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textEmailActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_textEmailActionPerformed
 
-    private void textDataDeNascimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textDataDeNascimentoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textDataDeNascimentoActionPerformed
+    private void textDataNascimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textDataNascimentoActionPerformed
+
+    }//GEN-LAST:event_textDataNascimentoActionPerformed
 
     private void buttonEsquerdaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEsquerdaActionPerformed
-        // TODO add your handling code here:
+        especialidades2.clearSelection();
     }//GEN-LAST:event_buttonEsquerdaActionPerformed
+
+    private void buttonDireitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDireitaActionPerformed
+        especialidades1.clearSelection();
+    }//GEN-LAST:event_buttonDireitaActionPerformed
+
+    private void buttonDireitaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonDireitaMouseReleased
+
+
+    }//GEN-LAST:event_buttonDireitaMouseReleased
+
+    private void buttonEsquerdaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonEsquerdaMouseReleased
+
+    }//GEN-LAST:event_buttonEsquerdaMouseReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -405,10 +422,11 @@ public class DialogMedico extends javax.swing.JDialog {
     private javax.swing.JPanel labelFicha;
     private javax.swing.JTextField textCodigo;
     private javax.swing.JTextField textCrm;
-    private javax.swing.JTextField textDataDeNascimento;
+    private javax.swing.JTextField textDataNascimento;
     private javax.swing.JTextField textEmail;
     private javax.swing.JTextField textNomeMedico;
     private javax.swing.JTextField textTelefone;
     private javax.swing.JLabel titulo;
     // End of variables declaration//GEN-END:variables
 }
+    

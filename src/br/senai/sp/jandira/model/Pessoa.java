@@ -1,13 +1,13 @@
+
 package br.senai.sp.jandira.model;
 
 import java.time.LocalDate;
 
 public class Pessoa {
-
     private String nome;
+    String telefone;
     private String email;
-    private String telefone;
-    private LocalDate dataDeNascimento;
+    private LocalDate dataNascimento;
 
     public String getNome() {
         return nome;
@@ -29,21 +29,16 @@ public class Pessoa {
         return telefone;
     }
 
-    public void setTelefone(String Telefone) {
-        this.telefone = Telefone;
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
-    public LocalDate getDataDeNascimento() {
-        return dataDeNascimento;
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
     }
 
-    public void setDataDeNascimento(LocalDate dataDeNascimento) {
-        this.dataDeNascimento = dataDeNascimento;
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
     }
-
-//    public String getPessoaSeparadoPorPontoEVirgula() {
-//        String PessoaStr = this.nome + ";" + this.email + ";" + this.telefone + ";" + this.dataDeNascimento;
-//        return PessoaStr;
-//}
     
 }

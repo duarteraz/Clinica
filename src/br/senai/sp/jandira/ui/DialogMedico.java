@@ -1,20 +1,30 @@
 package br.senai.sp.jandira.ui;
 
+import br.senai.sp.jandira.dao.EspecialidadesDAO;
 import br.senai.sp.jandira.dao.MedicoDAO;
+import br.senai.sp.jandira.model.Especialidade;
 import br.senai.sp.jandira.model.TipoOperacao;
 import br.senai.sp.jandira.model.Medico;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultListModel;
+
 import javax.swing.JOptionPane;
 
 public class DialogMedico extends javax.swing.JDialog {
-
+    
     private TipoOperacao tipoOperacao;
     private Medico medico;
-
+    
+    private DefaultListModel<Especialidade> listaTodosModel = new DefaultListModel<>();
+    private DefaultListModel<Especialidade> selecionadosModel = new DefaultListModel<>();
+    private ArrayList<Especialidade> selecionados = new ArrayList<>();
+    
     public DialogMedico(java.awt.Frame parent,
             boolean modal,
             TipoOperacao tipoOperacao,
             Medico medico) {
-
+        
         super(parent, modal);
         initComponents();
         this.tipoOperacao = tipoOperacao;
@@ -22,17 +32,22 @@ public class DialogMedico extends javax.swing.JDialog {
         if (tipoOperacao == TipoOperacao.ALTERAR) {
             preencherFormulario();
         }
+        
     }
-
+    
     private void preencherFormulario() {
         titulo.setText("Médico - " + tipoOperacao);
         icone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/imagem/medico.png")));
         textCodigo.setText(medico.getCodigo().toString());
         textNomeMedico.setText(medico.getNome());
         textTelefone.setText(medico.getTelefone());
+        
+        listaTodosModel.addAll(EspecialidadesDAO.listarTodos());
+       // listaTodos.setModel();
+        
     }
-
-        @SuppressWarnings("unchecked")
+    
+    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -53,11 +68,12 @@ public class DialogMedico extends javax.swing.JDialog {
         jLabel8 = new javax.swing.JLabel();
         textDataNascimento = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        especialidades2 = new javax.swing.JList<>();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        especialidades1 = new javax.swing.JList<>();
-        buttonEsquerda = new javax.swing.JButton();
+        listaSelecionados = new javax.swing.JList<>();
         buttonDireita = new javax.swing.JButton();
+        buttonEsquerda = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        listaTodos = new javax.swing.JList<>();
+        jLabel9 = new javax.swing.JLabel();
         buttonSalvar = new javax.swing.JButton();
         buttonCancelar = new javax.swing.JButton();
 
@@ -124,9 +140,9 @@ public class DialogMedico extends javax.swing.JDialog {
         textCrm.setBounds(120, 70, 116, 22);
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel6.setText("Telefone:");
+        jLabel6.setText("Especialidades");
         labelFicha.add(jLabel6);
-        jLabel6.setBounds(30, 120, 116, 16);
+        jLabel6.setBounds(40, 180, 116, 20);
 
         textTelefone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -162,35 +178,14 @@ public class DialogMedico extends javax.swing.JDialog {
         labelFicha.add(textDataNascimento);
         textDataNascimento.setBounds(420, 140, 140, 22);
 
-        jScrollPane1.setViewportView(especialidades2);
+        jScrollPane1.setViewportView(listaSelecionados);
 
         labelFicha.add(jScrollPane1);
-        jScrollPane1.setBounds(260, 190, 80, 130);
-
-        jScrollPane2.setViewportView(especialidades1);
-
-        labelFicha.add(jScrollPane2);
-        jScrollPane2.setBounds(60, 190, 80, 130);
-
-        buttonEsquerda.setBackground(new java.awt.Color(102, 153, 255));
-        buttonEsquerda.setFont(new java.awt.Font("Playbill", 1, 24)); // NOI18N
-        buttonEsquerda.setText("<<");
-        buttonEsquerda.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                buttonEsquerdaMouseReleased(evt);
-            }
-        });
-        buttonEsquerda.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonEsquerdaActionPerformed(evt);
-            }
-        });
-        labelFicha.add(buttonEsquerda);
-        buttonEsquerda.setBounds(170, 250, 60, 50);
+        jScrollPane1.setBounds(270, 220, 110, 130);
 
         buttonDireita.setBackground(new java.awt.Color(102, 153, 255));
         buttonDireita.setFont(new java.awt.Font("Playbill", 1, 24)); // NOI18N
-        buttonDireita.setText(">>");
+        buttonDireita.setText("<<");
         buttonDireita.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 buttonDireitaMouseReleased(evt);
@@ -202,10 +197,36 @@ public class DialogMedico extends javax.swing.JDialog {
             }
         });
         labelFicha.add(buttonDireita);
-        buttonDireita.setBounds(170, 200, 60, 50);
+        buttonDireita.setBounds(180, 230, 60, 50);
+
+        buttonEsquerda.setBackground(new java.awt.Color(102, 153, 255));
+        buttonEsquerda.setFont(new java.awt.Font("Playbill", 1, 24)); // NOI18N
+        buttonEsquerda.setText(">>");
+        buttonEsquerda.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                buttonEsquerdaMouseReleased(evt);
+            }
+        });
+        buttonEsquerda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonEsquerdaActionPerformed(evt);
+            }
+        });
+        labelFicha.add(buttonEsquerda);
+        buttonEsquerda.setBounds(180, 300, 60, 50);
+
+        jScrollPane2.setViewportView(listaTodos);
+
+        labelFicha.add(jScrollPane2);
+        jScrollPane2.setBounds(30, 220, 110, 130);
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel9.setText("Telefone:");
+        labelFicha.add(jLabel9);
+        jLabel9.setBounds(30, 120, 116, 20);
 
         getContentPane().add(labelFicha);
-        labelFicha.setBounds(10, 70, 760, 360);
+        labelFicha.setBounds(10, 70, 760, 370);
 
         buttonSalvar.setBackground(new java.awt.Color(102, 153, 255));
         buttonSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/imagem/opcao-de-salvar-arquivo.png"))); // NOI18N
@@ -216,7 +237,7 @@ public class DialogMedico extends javax.swing.JDialog {
             }
         });
         getContentPane().add(buttonSalvar);
-        buttonSalvar.setBounds(630, 450, 50, 50);
+        buttonSalvar.setBounds(610, 460, 50, 50);
 
         buttonCancelar.setBackground(new java.awt.Color(102, 153, 255));
         buttonCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/imagem/cancelar (1).png"))); // NOI18N
@@ -227,9 +248,9 @@ public class DialogMedico extends javax.swing.JDialog {
             }
         });
         getContentPane().add(buttonCancelar);
-        buttonCancelar.setBounds(690, 450, 50, 50);
+        buttonCancelar.setBounds(680, 460, 50, 50);
 
-        setBounds(0, 0, 827, 530);
+        setBounds(0, 0, 827, 581);
     }// </editor-fold>//GEN-END:initComponents
 
     private void textCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textCodigoActionPerformed
@@ -254,123 +275,123 @@ public class DialogMedico extends javax.swing.JDialog {
     private void atualizar() {
         medico.setNome(textNomeMedico.getText());
         medico.setCrm(textCrm.getText());
-
+        
         medico.setCrm(textCrm.getText());
-
+        
         if (validarCadastro()) {
-
+            
             MedicoDAO.atualizar(medico);
-
+            
             JOptionPane.showMessageDialog(
                     null,
                     "Médico atualizado com sucesso!",
                     "Médico",
                     JOptionPane.INFORMATION_MESSAGE);
-
+            
             dispose();
-
+            
         }
     }
-
+    
     private void gravar() {
-
+        
         Medico medico = new Medico();
         medico.setNome(textNomeMedico.getText());
         medico.setCrm(textCrm.getText());
         medico.setTelefone(textTelefone.getText());
-
+        
         if (validarCadastro()) {
             MedicoDAO.gravar(medico);
-
+            
             JOptionPane.showMessageDialog(
                     this,
                     "Médico gravado com sucesso!",
                     "Médico",
                     JOptionPane.INFORMATION_MESSAGE);
-
+            
             dispose();
         }
     }
-
+    
     private boolean validarCadastro() {
-
+        
         if (textCrm.getText().isEmpty()) {
-
+            
             JOptionPane.showMessageDialog(
                     this,
                     "Por favor preencha o Crm!",
                     "Médico",
                     JOptionPane.ERROR_MESSAGE);
-
+            
             textCrm.requestFocus();
-
+            
             return false;
-
+            
         }
-
+        
         if (textNomeMedico.getText().isEmpty()) {
-
+            
             JOptionPane.showMessageDialog(
                     this,
                     "Por favor preencha o nome do médico!",
                     "Médico",
                     JOptionPane.ERROR_MESSAGE);
-
+            
             textNomeMedico.requestFocus();
-
+            
             return false;
-
+            
         }
-
+        
         if (textTelefone.getText().isEmpty()) {
-
+            
             JOptionPane.showMessageDialog(
                     this,
                     "Por favor preencha o telefone!",
                     "Médico",
                     JOptionPane.ERROR_MESSAGE);
-
+            
             textTelefone.requestFocus();
-
+            
             return false;
-
+            
         }
-
+        
         if (textEmail.getText().isEmpty()) {
-
+            
             JOptionPane.showMessageDialog(
                     this,
                     "Por favor preencha o Email!",
                     "Médico",
                     JOptionPane.ERROR_MESSAGE);
-
+            
             textEmail.requestFocus();
-
+            
             return false;
-
+            
         }
-
+        
         if (textDataNascimento.getText().isEmpty()) {
-
+            
             JOptionPane.showMessageDialog(
                     this,
                     "Por favor preencha a data de nascimento!",
                     "Médico",
                     JOptionPane.ERROR_MESSAGE);
-
+            
             textDataNascimento.requestFocus();
-
+            
             return false;
-
+            
         }
-
+        
         return true;
-
+        
     }
     private void buttonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_buttonCancelarActionPerformed
-
+    
 
     private void textTelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textTelefoneActionPerformed
 
@@ -384,22 +405,21 @@ public class DialogMedico extends javax.swing.JDialog {
 
     }//GEN-LAST:event_textDataNascimentoActionPerformed
 
-    private void buttonEsquerdaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEsquerdaActionPerformed
-        especialidades2.clearSelection();
-    }//GEN-LAST:event_buttonEsquerdaActionPerformed
-
-    private void buttonDireitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDireitaActionPerformed
-        especialidades1.clearSelection();
-    }//GEN-LAST:event_buttonDireitaActionPerformed
-
     private void buttonDireitaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonDireitaMouseReleased
 
-
     }//GEN-LAST:event_buttonDireitaMouseReleased
+
+    private void buttonDireitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDireitaActionPerformed
+    
+    }//GEN-LAST:event_buttonDireitaActionPerformed
 
     private void buttonEsquerdaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonEsquerdaMouseReleased
 
     }//GEN-LAST:event_buttonEsquerdaMouseReleased
+
+    private void buttonEsquerdaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEsquerdaActionPerformed
+
+    }//GEN-LAST:event_buttonEsquerdaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -408,8 +428,6 @@ public class DialogMedico extends javax.swing.JDialog {
     private javax.swing.JButton buttonEsquerda;
     private javax.swing.JButton buttonSalvar;
     private javax.swing.JPanel cebecalho;
-    private javax.swing.JList<String> especialidades1;
-    private javax.swing.JList<String> especialidades2;
     private javax.swing.JLabel icone;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
@@ -417,9 +435,12 @@ public class DialogMedico extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel labelFicha;
+    private javax.swing.JList<String> listaSelecionados;
+    private javax.swing.JList<String> listaTodos;
     private javax.swing.JTextField textCodigo;
     private javax.swing.JTextField textCrm;
     private javax.swing.JTextField textDataNascimento;
@@ -429,4 +450,3 @@ public class DialogMedico extends javax.swing.JDialog {
     private javax.swing.JLabel titulo;
     // End of variables declaration//GEN-END:variables
 }
-    

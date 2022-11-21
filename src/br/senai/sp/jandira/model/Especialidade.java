@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.model;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 public class Especialidade {
 
@@ -52,12 +53,22 @@ public class Especialidade {
     }
 
     public void setDescricao(String descricao) {
-        this.descricao = descricao;
+      if (descricao.length() >= 10) {
+            this.descricao = descricao;
+        } else {
+            JOptionPane.showMessageDialog(null, descricao
+                    + " não é uma descrição válida\nDeve conter pelo menos 10 LETRAS!!");
+        }
     }
 
     // Métodos de acesso ( gatters and setters )
     public void setNome(String novoNome) {
-        nome = novoNome;
+    if (nome.length() >= 3) {
+            this.nome = nome;
+        } else {
+            JOptionPane.showMessageDialog(null, nome 
+                    + " não é um nome válido\nDeve conter pelo menos 3 LETRAS!!");
+        }
     }
 
     public String getNome() {

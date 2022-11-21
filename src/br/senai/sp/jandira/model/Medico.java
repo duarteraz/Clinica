@@ -1,31 +1,40 @@
 package br.senai.sp.jandira.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Medico extends Pessoa {
 
     private static int contador = 100;
+    private Integer codigo;
     private String crm;
     private ArrayList<Especialidade> especialidades;
-    private Integer codigo;
     
-    public ArrayList<Especialidade> getEspecialidade() {
-        return especialidades;
+      public ArrayList<Especialidade> getEspecialidade() {
+          return especialidades;  
     }
 
     public Medico() {
+
+        atualizarCodigo();
+
+    }
+
+    public Medico(Integer codigo, String crm, String nome) {
+
+        this.codigo = codigo;
+        setNome(nome);
+        this.crm = crm;
+
+    }
+
+    public Medico(String crm, String nome) {
+        this.crm = crm;
         atualizarCodigo();
     }
-    
-    public Medico(Integer codigo, String nome, String telefone) {
-        this.codigo = codigo;
-        super.getNome();
-        super.getTelefone();
-        this.contador = this.codigo;
-    }
-    
-    public void setEspecialidade(ArrayList<Especialidade> especialidade) {
-        this.especialidades = especialidade;
+
+    public Integer getCodigo() {
+        return codigo;
     }
 
     public String getCrm() {
@@ -36,21 +45,21 @@ public class Medico extends Pessoa {
         this.crm = crm;
     }
 
-    public static int getContador() {
-        return contador;
-    }
+//
+    
 
     private void atualizarCodigo() {
         contador++;
         this.codigo = contador;
     }
-    
-    public Integer getCodigo() {
-        return codigo;
-    }
 
     public String getMedicoSeparadoPorPontoEVirgula() {
-        return this.codigo + ";" + getNome() + ";" + getTelefone();
-    }
+        String MedicosStr
+                = this.codigo + ";"
+                + getNome() + ";"
+                + getCrm() + ";"
+                + getTelefone();
+        return MedicosStr;
 
+    }
 }

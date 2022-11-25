@@ -8,7 +8,9 @@ import java.util.Iterator;
 //import br.senai.sp.jandira.model.PlanoDeSaude;
 public class TesteDao {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) {}
+
+}
 
 //        String[] linha0 = {"Cotia", "Itapevi", "Jandira"};
 //        String[] linha1 = {"Barueri", "Carapicuíba", "Pirapora"};
@@ -87,39 +89,39 @@ public class TesteDao {
 //    }
 
 
-        //////// ESPECIALIDES TESTES 
-        Especialidade especial1 = new Especialidade("Cardio", "Basic");
-        Especialidade especial2 = new Especialidade("Nutri", "Premium");
-        Especialidade especial3 = new Especialidade("Neuro", "Platina");
-        Especialidade especial4 = new Especialidade("Oftalmo", "Ouro");
-
-        System.out.println(Especialidade.getContador());
-        System.out.println(especial1.getCodigo());
-        System.out.println(especial2.getCodigo());
-
-        EspecialidadesDAO.gravar(especial1);
-        EspecialidadesDAO.gravar(especial2);
-        EspecialidadesDAO.gravar(especial3);
-        EspecialidadesDAO.gravar(especial4);
-
-        EspecialidadesDAO.excluir(100);
-        for (Especialidade p : EspecialidadesDAO.listarTodos()) {
-            System.out.println("Código: " + p.getCodigo());
-            System.out.println("Nome: " + p.getNome());
-            System.out.println("Descrição: " + p.getDescricao());
-            System.out.println("--------------------");
-        }
-
-        int b[][] = new int[4][5];
-        int a[][] = {{1, 2, 3},
-        {4, 5, 6},
-        {7, 8, 9},
-        {0, 11, 12}};
-
-        int o = EspecialidadesDAO.listarTodos().indexOf(3);
-        System.out.println(o);
-        
-        
-
-    }
-}
+//        //////// ESPECIALIDES TESTES 
+//        Especialidade especial1 = new Especialidade("Cardio", "Basic");
+//        Especialidade especial2 = new Especialidade("Nutri", "Premium");
+//        Especialidade especial3 = new Especialidade("Neuro", "Platina");
+//        Especialidade especial4 = new Especialidade("Oftalmo", "Ouro");
+//
+//        System.out.println(Especialidade());
+//        System.out.println(especial1.getCodigo());
+//        System.out.println(especial2.getCodigo());
+//
+//        EspecialidadesDAO.gravar(especial1);
+//        EspecialidadesDAO.gravar(especial2);
+//        EspecialidadesDAO.gravar(especial3);
+//        EspecialidadesDAO.gravar(especial4);
+//
+//        EspecialidadesDAO.excluir(100);
+//        for (Especialidade p : EspecialidadesDAO.listarTodos()) {
+//            System.out.println("Código: " + p.getCodigo());
+//            System.out.println("Nome: " + p.getNome());
+//            System.out.println("Descrição: " + p.getDescricao());
+//            System.out.println("--------------------");
+//        }
+//
+//        int b[][] = new int[4][5];
+//        int a[][] = {{1, 2, 3},
+//        {4, 5, 6},
+//        {7, 8, 9},
+//        {0, 11, 12}};
+//
+//        int o = EspecialidadesDAO.listarTodos().indexOf(3);
+//        System.out.println(o);
+//        
+//        
+//
+//    }
+//}

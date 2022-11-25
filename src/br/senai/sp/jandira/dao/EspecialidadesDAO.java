@@ -32,8 +32,8 @@ public class EspecialidadesDAO {
 
     }
 
-    public static void gravar(Especialidade especialidades) {
-        especial.add(especialidades);
+   public static void gravar(Especialidade especialidade) {
+        especial.add(especialidade);
 
         try {
             BufferedWriter bw;
@@ -42,7 +42,7 @@ public class EspecialidadesDAO {
                     StandardOpenOption.APPEND,
                     StandardOpenOption.WRITE);
 
-            String novaEspecialidade = especialidades.getEspecialidadePorPontoEVirgula();
+            String novaEspecialidade = especialidade.getEspecialidadePorPontoEVirgula();
 
             bw.write(novaEspecialidade);
             bw.newLine();
@@ -51,10 +51,12 @@ public class EspecialidadesDAO {
         } catch (IOException e) {
             JOptionPane.showMessageDialog(
                     null,
-                    "Houve um erro ao gravar especialidade",
+                    "Houve um erro ao gravar o especialidade",
                     "Erro ao gravar",
                     JOptionPane.ERROR_MESSAGE);
+            
         }
+
     }
 
     public static boolean excluir(Integer codigo) {
@@ -67,40 +69,33 @@ public class EspecialidadesDAO {
 
         atualizarArquivo();
         return false;
+
     }
 
+
     private static void atualizarArquivo() {
-        // Reconstruir um arquivo atualizado ou seja, sem o plano removido      
-        // Passo 01 ---> Criar uma representação dos arquivos manipulado
+
         File arquivoAtual = new File(ARQUIVO);
         File arquivoTemp = new File(ARQUIVO_TEMP);
 
         try {
-            //          boolean criou =  arquivoTemp.createNewFile();
-            //            System.out.println(criou);
 
-            //criar o arquivo temporario para a escrita
             arquivoTemp.createNewFile();
 
-            // abrir o arquivo temporario para a escrita
             BufferedWriter bwTemp = Files.newBufferedWriter(
                     PATH_TEMP,
                     StandardOpenOption.APPEND,
                     StandardOpenOption.WRITE);
 
-            // interar na lista para adicionar os planos no arquivo
             for (Especialidade p : especial) {
                 bwTemp.write(p.getEspecialidadePorPontoEVirgula());
                 bwTemp.newLine();
             }
 
-            //fechar o arquivo temporario 
             bwTemp.close();
 
-            // excluir o arquivo atual - planoDeSaude.txt
             arquivoAtual.delete();
 
-            //Renomear o arquivoTemp
             arquivoTemp.renameTo(arquivoAtual);
 
         } catch (IOException ex) {
@@ -110,6 +105,7 @@ public class EspecialidadesDAO {
                     "Ocorreu um erro ao criar o arquivo!",
                     "Erro",
                     JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
         }
     }
 
@@ -149,7 +145,7 @@ public class EspecialidadesDAO {
     }
 
     public static void getListarEspecialidades() {
-        try {
+    try {
             BufferedReader br = Files.newBufferedReader(PATH);
 
             String linha = br.readLine();
@@ -175,17 +171,16 @@ public class EspecialidadesDAO {
                     "Houve um erro ao gravar",
                     "Erro ao gravar",
                     JOptionPane.ERROR_MESSAGE);
+            
         }
     }
 
     public static DefaultTableModel getTableModel() {
 
-        // Matriz que receberá as Especialidades
-        // que serão utilizados na Tabela (JTable)
+        
         Object[][] dados = new Object[especial.size()][3];
 
-        // For Each, para extrair cada objeto plano de saúde do
-        // arraylist planos e separar cada dado na matriz dados
+        
         int i = 0;
         for (Especialidade p : especial) {
             dados[i][0] = p.getCodigo();
@@ -194,14 +189,9 @@ public class EspecialidadesDAO {
             i++;
         }
 
-        // Definir um vetor com os nomes das colulas da tabela
-        String[] titulos = {"Código", "Nome da Especialidade", "Descrição da Especialidade"};
-
-        // Criar o modelo que será utilizado pela JTable 
-        // para exibir os dados dos planos
+        String[] titulos = {"Código", "Nome", "Descrição"};
         DefaultTableModel tableModel = new DefaultTableModel(dados, titulos);
 
         return tableModel;
-
     }
 }

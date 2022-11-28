@@ -1,17 +1,18 @@
 package br.senai.sp.jandira.ui;
 
 import br.senai.sp.jandira.dao.EspecialidadesDAO;
+import br.senai.sp.jandira.dao.EspecialidadesDAO;
 import br.senai.sp.jandira.model.Especialidade;
-import br.senai.sp.jandira.model.PlanoDeSaude;
 import br.senai.sp.jandira.model.TipoOperacao;
 import javax.swing.JOptionPane;
 
-public class DialogEspecialidade extends javax.swing.JDialog {
+public class DialogEspecialidades extends javax.swing.JDialog {
 
     private TipoOperacao tipoOperacao;
     private Especialidade especialidade;
 
-    public DialogEspecialidade(java.awt.Frame parent,
+    public DialogEspecialidades(
+            java.awt.Frame parent,
             boolean modal,
             TipoOperacao tipoOperacao,
             Especialidade especialidade) {
@@ -21,20 +22,18 @@ public class DialogEspecialidade extends javax.swing.JDialog {
         this.tipoOperacao = tipoOperacao;
         this.especialidade = especialidade;
 
-        if (tipoOperacao == TipoOperacao.ALTERAR) {
+        if (tipoOperacao == TipoOperacao.EDITAR) {
             preencherFormulario();
         }
     }
 
     private void preencherFormulario() {
-
         labelTitulo.setText("Especialidade - " + tipoOperacao);
-        labelIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/imagem/adicionar-ficheiro.png")));
+        labelIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/imagens/editar.png")));
         textCodigo.setText(especialidade.getCodigo().toString());
         textNome.setText(especialidade.getNome());
         textDescricao.setText(especialidade.getDescricao());
     }
-
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

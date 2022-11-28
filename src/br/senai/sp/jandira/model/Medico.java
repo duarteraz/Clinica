@@ -1,80 +1,76 @@
 package br.senai.sp.jandira.model;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
+import javax.swing.DefaultListModel;
 
 public class Medico extends Pessoa {
 
-    public Medico(Integer valueOf, String par, String par1) {
+    private static int contador = 100;
+    private String crm;
+    private ArrayList<Especialidade> especialidades;
+    private Integer codigo;
+
+    public ArrayList<Especialidade> getEspecialidade() {
+        return especialidades;
     }
 
-    //Atributos
-    private static int contador = 100;
-    private Integer codigo;
-    private String crm;
-    private static ArrayList<Medico> medicos;
-    private Especialidade especialidade;
+    public ArrayList<String> getListaDeEspecialidadesDoMedico() {
+        ArrayList<String> dados = new ArrayList<>();
+        for (Especialidade e : especialidades) {
+            dados.add(e.getNome());
+        }
+        DefaultListModel<String> ListaModel = new DefaultListModel<>();
+
+        ListaModel.addAll(dados);
+
+        return dados;
+
+    }
 
     public Medico() {
+        atualizarCodigo();
     }
 
-    public Medico(Integer valueOf, String string, String string0, String string1, String string2, LocalDate dataDeNascimento, ArrayList<Especialidade> especialidade) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Medico(String nome, String telefone) {
+        getNome();
+        getTelefone();
+        atualizarCodigo();
     }
 
-//Métodos
-    private void atualizarCodigo() {
-        contador++;
-        this.codigo = contador;
+    public Medico(Integer codigo, String nome, String telefone) {
+        this.codigo = codigo;
+        super.setNome(nome);
+        super.setTelefone(telefone);
+        this.contador = this.codigo;
     }
 
-    public static int getContador() {
-        return contador;
-    }
-
-    public Integer getCodigo() {
-        return codigo;
-    }
-
-    public static ArrayList<Medico> getMedicos() {
-        return medicos;
-    }
-
-    public static void setMedicos(ArrayList<Medico> medicos) {
-        Medico.medicos = medicos;
+    public void setEspecialidade(ArrayList<Especialidade> especialidade) {
+        this.especialidades = especialidade;
     }
 
     public String getCrm() {
         return crm;
     }
 
-    public Especialidade getEspecialidade() {
-        return especialidade;
-    }
-
-    public String getMedicoComPontoVirgula() {
-        return this.getCodigo()
-                + ";" + this.getCrm()
-                + ";" + this.getNome()
-                + ";" + this.getTelefone()
-                + ";" + this.getEmail()
-                + ";" + this.getDataNascimento();
-    }
-
-    public static void setContador(int contador) {
-        Medico.contador = contador;
-    }
-
-    public void setCodigo(Integer codigo) {
-        this.codigo = codigo;
-    }
-
     public void setCrm(String crm) {
         this.crm = crm;
     }
 
-    public void setEspecialidade(Especialidade especialidade) {
-        this.especialidade = especialidade;
+    public static int getContador() {
+        return contador;
+    }
+
+    private void atualizarCodigo() {
+        contador++;
+        this.codigo = contador;
+    }
+
+    public Integer getCodigo() {
+        return codigo;
+    }
+
+    public String getMedicoSeparadoPorPontoEVirgula() {
+        return this.codigo + ";" + super.getNome() + ";" + super.getTelefone();
     }
 
 }

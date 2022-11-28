@@ -172,10 +172,10 @@ public class PanelEspecialidades extends javax.swing.JPanel {
     private void editar() {
         Especialidade especialidade = EspecialidadesDAO.getEspecialidade(getCodigo());
 
-        DialogEspecialidade dialogEspecialidade = new DialogEspecialidade(
+        DialogEspecialidades dialogEspecialidade = new DialogEspecialidades(
                         null,
                         true,
-                        TipoOperacao.ALTERAR,
+                        TipoOperacao.EDITAR,
                         especialidade);
 
         dialogEspecialidade.setVisible(true);
@@ -191,8 +191,8 @@ public class PanelEspecialidades extends javax.swing.JPanel {
 
     private void adicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarActionPerformed
 
-        DialogEspecialidade dialogEspecialidade
-                = new DialogEspecialidade(
+        DialogEspecialidades dialogEspecialidade
+                = new DialogEspecialidades(
                         null,
                         true,
                         TipoOperacao.ADICIONAR,

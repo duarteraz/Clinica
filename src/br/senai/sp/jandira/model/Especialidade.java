@@ -1,50 +1,54 @@
 package br.senai.sp.jandira.model;
 
-import java.util.ArrayList;
-import javax.swing.JOptionPane;
-
 public class Especialidade {
 
-    // Atributo
-    private static int contador = 100;
-    private Integer codigo;
     private String nome;
     private String descricao;
+    private Integer codigo;
+    private static int contador = 100;
 
-    // Construtor 
-    public Especialidade() {
-        contador++;
-        this.codigo = contador;
-    }
-
+    // Métodos de acesso getters and setters
+    // sempre será void.
     public Especialidade(String nome) {
         this.nome = nome;
-        this.codigo = contador;
-        contador++;
+        atualizarCodigo();
     }
 
     public Especialidade(String nome, String descricao) {
         this.nome = nome;
         this.descricao = descricao;
-        this.codigo = contador;
-        contador++;
+        atualizarCodigo();
     }
-
-    public Especialidade(Integer codigo, String nome, String descricao) {
+    
+    public Especialidade() {
+        atualizarCodigo();
+    }
+    
+    public Especialidade(Integer codigo, String nome, String descricao){
+        this.codigo = codigo;
         this.nome = nome;
         this.descricao = descricao;
-        this.codigo = codigo;
         this.contador = this.codigo;
     }
 
-    public void setNome(String nome) {
+    public static int getContador() {
+        return contador;
+    }
 
-        this.nome = nome;
-
+    private void atualizarCodigo() {
+        contador++;
+        this.codigo = contador;
+    }
+    
+    public Integer getCodigo() {
+        return codigo;
+    }
+    
+    public void setNome(String nomeEspecialidade) {
+        nome = nomeEspecialidade;
     }
 
     public String getNome() {
-
         return nome;
     }
 
@@ -55,17 +59,15 @@ public class Especialidade {
     public String getDescricao() {
         return descricao;
     }
-
-    public Integer getCodigo() {
-        return codigo;
+    
+    public String dadosDaEspecialidade(){
+       return this.nome + " , " + this.descricao;
     }
 
-    public String getEspecialidadePorPontoEVirgula() {
-        String EspecialidadeStr = this.codigo + ";" + this.nome + ";" + this.descricao;
-        return EspecialidadeStr;
+    
+    
+    public String getEspecialidadeSeparadoPorPontoEVirgula(){
+            return this.codigo + ";" + this.nome + ";" + this.descricao; 
     }
 
 }
-
-// criar 3 especialidades, guardar as especialidades em uma ArrayList<> 
-//e exibir o nome das especilidades 

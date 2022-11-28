@@ -1,39 +1,55 @@
 package br.senai.sp.jandira.ui;
 
+import br.senai.sp.jandira.dao.EspecialidadesDAO;
 import br.senai.sp.jandira.dao.MedicoDAO;
-import br.senai.sp.jandira.model.Medico;
+import br.senai.sp.jandira.model.Especialidade;
 import br.senai.sp.jandira.model.TipoOperacao;
+import br.senai.sp.jandira.model.Medico;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 public class DialogMedico extends javax.swing.JDialog {
 
     private TipoOperacao tipoOperacao;
-    private Medico med;
+    private Medico medico;
+
+    private DefaultListModel<String> listaDasEspecialidades = new DefaultListModel<>();
+    private ArrayList<String> especialidades = new ArrayList<>();
+    private ArrayList<Especialidade> especialidadesNSelecionadas = EspecialidadesDAO.listarTodos();
+
+    private DefaultListModel<String> listaDasEspecialidadesDoMedico = new DefaultListModel<>();
+    private ArrayList<String> selecionadas = new ArrayList<>();
+    private ArrayList<Especialidade> especialidadesSelecionadas = new ArrayList<>();
 
     public DialogMedico(java.awt.Frame parent,
             boolean modal,
             TipoOperacao tipoOperacao,
-            Medico med) {
+            Medico medico) {
 
         super(parent, modal);
         initComponents();
         this.tipoOperacao = tipoOperacao;
-        this.med = med;
+        this.medico = medico;
+        atualizarListasEspecialidades();
 
-        if (tipoOperacao == TipoOperacao.ALTERAR) {
+        //Preencher os campos, caso o tipo de operação for EDITAR
+        if (tipoOperacao == TipoOperacao.EDITAR) {
             preencherFormulario();
+            atualizarListasEspecialidades();
         }
+
     }
 
     private void preencherFormulario() {
-          titulo.setText("Médicos - " + tipoOperacao);
-         icone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/imagem/adicionar-ficheiro.png")));
-        textCrm.setText(med.getCodigo().toString());
-        textCrm.setText(med.getCrm());
-        textNome.setText(med.getNome());
-        textTelefone.setText(med.getTelefone());
-        textEmail.setText(med.getEmail());
-        textData.setText(med.getDataNascimento().toString());
+        titulo.setText("Médico - " + tipoOperacao);
+        icone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/imagem/adicionar-ficheiro.png"))); // NOI18N
+        textCodigo1.setText(medico.getCodigo().toString());
+        textNome.setText(medico.getNome());
+        textTelefone.setText(medico.getTelefone());
+
     }
 
     @SuppressWarnings("unchecked")
@@ -62,6 +78,8 @@ public class DialogMedico extends javax.swing.JDialog {
         listSelecionados = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         listTodos = new javax.swing.JList<>();
+        adicionarEspecialidade = new javax.swing.JButton();
+        removerEspecialidade = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(null);
@@ -186,25 +204,39 @@ public class DialogMedico extends javax.swing.JDialog {
         labelFicha1.add(textData);
         textData.setBounds(560, 210, 150, 22);
 
-        listSelecionados.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane1.setViewportView(listSelecionados);
 
         labelFicha1.add(jScrollPane1);
-        jScrollPane1.setBounds(260, 260, 100, 146);
+        jScrollPane1.setBounds(260, 260, 100, 130);
 
-        listTodos.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane2.setViewportView(listTodos);
 
         labelFicha1.add(jScrollPane2);
-        jScrollPane2.setBounds(70, 260, 100, 146);
+        jScrollPane2.setBounds(70, 260, 100, 130);
+
+        adicionarEspecialidade.setBackground(new java.awt.Color(102, 153, 255));
+        adicionarEspecialidade.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
+        adicionarEspecialidade.setForeground(new java.awt.Color(255, 255, 255));
+        adicionarEspecialidade.setText(">>");
+        adicionarEspecialidade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adicionarEspecialidadeActionPerformed(evt);
+            }
+        });
+        labelFicha1.add(adicionarEspecialidade);
+        adicionarEspecialidade.setBounds(180, 290, 72, 30);
+
+        removerEspecialidade.setBackground(new java.awt.Color(102, 153, 255));
+        removerEspecialidade.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
+        removerEspecialidade.setForeground(new java.awt.Color(255, 255, 255));
+        removerEspecialidade.setText("<<");
+        removerEspecialidade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removerEspecialidadeActionPerformed(evt);
+            }
+        });
+        labelFicha1.add(removerEspecialidade);
+        removerEspecialidade.setBounds(180, 330, 72, 30);
 
         getContentPane().add(labelFicha1);
         labelFicha1.setBounds(10, 70, 760, 430);
@@ -220,110 +252,6 @@ public class DialogMedico extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_buttonSalvarActionPerformed
 
-    private void atualizar() {
-        med.setCrm(textCrm.getText());
-        med.setNome(textNome.getText());
-        med.setTelefone(textTelefone.getText());
-        med.setEmail(textEmail.getText());
-        //      med.setDataNascimento(textData.get());
-
-        if (validarCadastro()) {
-
-            MedicoDAO.atualizar(med);
-
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Médicos atualizado com sucesso!",
-                    "Médico",
-                    JOptionPane.INFORMATION_MESSAGE);
-
-            dispose();
-
-        }
-    }
-
-    private void gravar() {
-        // Criar um objeto Plano de Saúde
-        Medico med = new Medico();
-        med.setCrm(textCrm.getText());
-        med.setNome(textNome.getText());
-        med.setTelefone(textTelefone.getText());
-        med.setEmail(textEmail.getText());
-
-        if (validarCadastro()) {
-            MedicoDAO.gravar(med);
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Médico(a) gravado com sucesso!",
-                    "Médicos",
-                    JOptionPane.INFORMATION_MESSAGE);
-
-            dispose();
-        }
-    }
-
-    private boolean validarCadastro() {
-
-        if (textCrm.getText().isEmpty()) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Por favor preencha o Crm!",
-                    "Médicos",
-                    JOptionPane.ERROR_MESSAGE);
-
-            textCrm.requestFocus();
-
-            return false;
-
-        }
-
-        if (textNome.getText().isEmpty()) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Por favor preencha o nome do(a) médico(a)!",
-                    "Médicos",
-                    JOptionPane.ERROR_MESSAGE);
-
-            textNome.requestFocus();
-
-            return false;
-
-        }
-
-        if (textTelefone.getText().isEmpty()) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Por favor preencha o Telefone!",
-                    "Médicos",
-                    JOptionPane.ERROR_MESSAGE);
-
-            textTelefone.requestFocus();
-
-            return false;
-
-        }
-
-        if (textEmail.getText().isEmpty()) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Por favor preencha o E-mail!",
-                    "Médicos",
-                    JOptionPane.ERROR_MESSAGE);
-
-            textEmail.requestFocus();
-
-            return false;
-
-        }
-
-        return true;
-
-    }
     private void buttonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_buttonCancelarActionPerformed
@@ -349,11 +277,127 @@ public class DialogMedico extends javax.swing.JDialog {
     }//GEN-LAST:event_textEmailActionPerformed
 
     private void textDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textDataActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_textDataActionPerformed
 
+    private void adicionarEspecialidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarEspecialidadeActionPerformed
+        List<String> especialidadesDoMedico = listTodos.getSelectedValuesList();
 
+        for (String e : especialidadesDoMedico) {
+            selecionadas.add(e);
+        }
+        for (Especialidade e : especialidadesNSelecionadas) {
+            if (especialidadesDoMedico.contains(e.getNome())) {
+                especialidadesSelecionadas.add(e);
+            }
+        }
+
+        listaDasEspecialidadesDoMedico.clear();
+        listaDasEspecialidadesDoMedico.addAll(selecionadas);
+        listSelecionados.setModel(listaDasEspecialidadesDoMedico);
+
+        int[] excluir = listTodos.getSelectedIndices();
+        for (int e : excluir) {
+            listaDasEspecialidades.remove(e);
+            especialidades.remove(e);
+
+        }
+
+
+    }//GEN-LAST:event_adicionarEspecialidadeActionPerformed
+
+    private void removerEspecialidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerEspecialidadeActionPerformed
+        List<String> removerEspecialidades = listSelecionados.getSelectedValuesList();
+
+        for (String e : removerEspecialidades) {
+            especialidades.add(e);
+        }
+        for (Especialidade e : especialidadesNSelecionadas) {
+            if (removerEspecialidades.contains(e.getNome())) {
+                especialidadesSelecionadas.remove(e);
+            }
+        }
+
+        listaDasEspecialidades.clear();
+        listaDasEspecialidades.addAll(especialidades);
+        listTodos.setModel(listaDasEspecialidades);
+
+        int[] excluir = listTodos.getSelectedIndices();
+        for (int e : excluir) {
+            listaDasEspecialidadesDoMedico.remove(e);
+            selecionadas.remove(e);
+        }
+     }//GEN-LAST:event_removerEspecialidadeActionPerformed
+
+    private void atualizar() {
+        medico.setNome(textNome.getText());
+        medico.setTelefone(textTelefone.getText());
+        medico.setDataNascimento(dataCorreta());
+        medico.setEspecialidade(especialidadesSelecionadas);
+        MedicoDAO.atualizar(medico);
+
+        if (validarCadastro()) {
+            MedicoDAO.atualizar(medico);
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Médico atualizado com sucesso!",
+                    "Médico",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            dispose();
+        }
+    }
+
+    private void gravar() {
+        //        Criar um objeto plano de saúde 
+        Medico medico = new Medico();
+        medico.setNome(textNome.getText());
+        medico.setTelefone(textTelefone.getText());
+
+        if (validarCadastro()) {
+            MedicoDAO.gravar(medico);
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Médico gravado",
+                    "Médico",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            dispose();
+        }
+    }
+
+    private boolean validarCadastro() {
+
+        if (textNome.getText().isEmpty()) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Por favor, preencha o campo Nome do Médico!",
+                    "Médico",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            textNome.requestFocus();
+
+            return false;
+        }
+
+        if (textTelefone.getText().isEmpty()) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Por favor, preencha o campo Telefone!",
+                    "Médico",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            textTelefone.requestFocus();
+
+            return false;
+        }
+        return true;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton adicionarEspecialidade;
     private javax.swing.JButton buttonCancelar;
     private javax.swing.JButton buttonSalvar;
     private javax.swing.JPanel cebecalho;
@@ -369,6 +413,7 @@ public class DialogMedico extends javax.swing.JDialog {
     private javax.swing.JPanel labelFicha1;
     private javax.swing.JList<String> listSelecionados;
     private javax.swing.JList<String> listTodos;
+    private javax.swing.JButton removerEspecialidade;
     private javax.swing.JTextField textCodigo1;
     private javax.swing.JTextField textCrm;
     private javax.swing.JTextField textData;
@@ -377,4 +422,37 @@ public class DialogMedico extends javax.swing.JDialog {
     private javax.swing.JTextField textTelefone;
     private javax.swing.JLabel titulo;
     // End of variables declaration//GEN-END:variables
+private LocalDate dataCorreta() {
+        String[] data = textData.getText().split("/");
+
+        return LocalDate.of(Integer.parseInt(data[2]), Integer.parseInt(data[1]), Integer.parseInt(data[0]));
+
+    }
+
+    private void atualizarListasEspecialidades() {
+        especialidades = EspecialidadesDAO.getListaDeNomes();
+        listaDasEspecialidades.addAll(especialidades);
+        listTodos.setModel(listaDasEspecialidades);
+        if (tipoOperacao == TipoOperacao.ADICIONAR) {
+
+        } else {
+            especialidadesSelecionadas = medico.getEspecialidade();
+            selecionadas = medico.getListaDeEspecialidadesDoMedico();
+            listaDasEspecialidadesDoMedico.clear();
+            listaDasEspecialidadesDoMedico.addAll(selecionadas);
+            listSelecionados.setModel(listaDasEspecialidadesDoMedico);
+
+            int i = 0;
+            for (String e : selecionadas) {
+                if (especialidades.contains(e)) {
+                    especialidades.remove(e);
+                }
+            }
+            listaDasEspecialidades.clear();
+            listaDasEspecialidades.addAll(especialidades);
+
+        }
+
+    }
+
 }

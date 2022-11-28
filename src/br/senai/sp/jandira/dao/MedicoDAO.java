@@ -1,7 +1,7 @@
 package br.senai.sp.jandira.dao;
 
-import br.senai.sp.jandira.model.Especialidade;
 import br.senai.sp.jandira.model.Medico;
+import br.senai.sp.jandira.model.Pessoa;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -10,24 +10,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class MedicoDAO {
+public class MedicoDAO extends Pessoa{
 
     private Medico medico;
-    private static ArrayList<Medico> med = new ArrayList<>();
-
-    private static final String ARQUIVO = "C:\\Users\\22282117\\projeto\\Medicos.txt";
-    private static final String ARQUIVO_TEMP = "C:\\Users\\22282117\\projeto\\Medicos_temp.txt";
+    private static ArrayList<Medico> medicoList = new ArrayList<>();
+    private static final String ARQUIVO = "C:\\Users\\22282117\\projeto\\medico.txt";
+    private static final String ARQUIVO_TEMP = "C:\\Users\\22282117\\projeto\\medico_temp.txt";
     private static final Path PATH = Paths.get(ARQUIVO);
     private static final Path PATH_TEMP = Paths.get(ARQUIVO_TEMP);
 
     public MedicoDAO(Medico medico) {
-        this.med.add(medico);
-
+        this.medicoList.add(medico);
     }
 
     public MedicoDAO() {
@@ -35,43 +32,39 @@ public class MedicoDAO {
     }
 
     public static void gravar(Medico medico) {
-        med.add(medico);
+        medicoList.add(medico);
 
         try {
-            BufferedWriter bw;
-            bw = Files.newBufferedWriter(
-                    PATH,
+            //Gravar o Médico no arquivo texto
+            BufferedWriter bw = Files.newBufferedWriter(PATH,
                     StandardOpenOption.APPEND,
                     StandardOpenOption.WRITE);
 
-            String novoPlanoDeSaude = medico.getMedicoComPontoVirgula();
-
-            bw.write(novoPlanoDeSaude);
+            bw.write(medico.getMedicoSeparadoPorPontoEVirgula());
             bw.newLine();
             bw.close();
 
-        } catch (IOException e) {
+        } catch (IOException ex) {
             JOptionPane.showMessageDialog(
                     null,
-                    "Houve um erro ao gravar o medico",
+                    "Ocorreu um erro ao gravar.\n\nEntre em contato com o suporte",
                     "Erro ao gravar",
                     JOptionPane.ERROR_MESSAGE);
-
+//            ex.printStackTrace();
         }
-
     }
 
     public static boolean excluir(Integer codigo) {
-        for (Medico p : med) {
-            if (p.getCodigo().equals(codigo)) {
-                med.remove(p);
+        for (Medico m : medicoList) {
+            if (m.getCodigo().equals(codigo)) {
+                medicoList.remove(m);
                 break;
             }
         }
 
         atualizarArquivo();
-        return false;
 
+        return false;
     }
 
     private static void atualizarArquivo() {
@@ -80,7 +73,7 @@ public class MedicoDAO {
         File arquivoTemp = new File(ARQUIVO_TEMP);
 
         try {
-
+//          Criar o arquivo temporário para escrita 
             arquivoTemp.createNewFile();
 
             BufferedWriter bwTemp = Files.newBufferedWriter(
@@ -88,43 +81,44 @@ public class MedicoDAO {
                     StandardOpenOption.APPEND,
                     StandardOpenOption.WRITE);
 
-            for (Medico p : med) {
-                bwTemp.write(p.getMedicoComPontoVirgula());
+//          Iterar na lista para adicionar os planos no arquivo temporário
+            for (Medico m : medicoList) {
+                bwTemp.write(m.getMedicoSeparadoPorPontoEVirgula());
                 bwTemp.newLine();
             }
 
             bwTemp.close();
 
+//            Excluir o arquivo atual - plano_de_saude.txt
             arquivoAtual.delete();
 
+//            Renomear o arquivo temporário
             arquivoTemp.renameTo(arquivoAtual);
 
         } catch (IOException ex) {
-
             JOptionPane.showMessageDialog(
-                    null,
-                    "Ocorreu um erro ao criar o arquivo!",
-                    "Erro",
+                    null, 
+                    "Ocorreu um erro ao criar o arquivo", 
+                    "Erro", 
                     JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
+                    
+//            ex.getStackTrace();
         }
     }
 
     public static Medico getMedico(Integer codigo) {
-
-        for (Medico p : med) {
-            if (p.getCodigo().equals(codigo)) {
-                return p;
+        for (Medico m : medicoList) {
+            if (m.getCodigo().equals(codigo)) {
+                return m;
             }
         }
-
         return null;
     }
 
     public static void atualizar(Medico medico) {
-        for (Medico p : med) {
-            if (p.getCodigo().equals(medico.getCodigo())) {
-                med.set(med.indexOf(p), medico);
+        for (Medico m : medicoList) {
+            if (m.getCodigo().equals(medico.getCodigo())) {
+                medicoList.set(medicoList.indexOf(m), medico);
                 break;
             }
         }
@@ -132,62 +126,60 @@ public class MedicoDAO {
     }
 
     public static ArrayList<Medico> listarTodos() {
-        return med;
+        return medicoList;
     }
 
     public static void getListaMedicos() {
+
         try {
+            // Abrir o arquivo para leitura - Leitor
+
             BufferedReader br = Files.newBufferedReader(PATH);
-            String linha = "";
-            linha = br.readLine();
+
+            String linha = br.readLine();
+
             while (linha != null && !linha.isEmpty()) {
-                String[] linhavetor = linha.split(";");
+                String[] linhaVetor = linha.split(";");
+                Medico novoMedico = new Medico(
+                  Integer.valueOf(linhaVetor[0]),
+                        linhaVetor[1],
+                        linhaVetor[2]);
 
-                int i = 0;
-                ArrayList<Especialidade> especialidades = new ArrayList<>();
-                while (linhavetor.length > i + 6) {
-                    especialidades.add(EspecialidadesDAO.getEspecialidade(Integer.valueOf(linhavetor[6 + i])));
-                    i++;
-                }
+                medicoList.add(novoMedico);
 
-                String[] data = linhavetor[5].split("/");
-                int ano = Integer.parseInt(data[2]);
-                int mes = Integer.parseInt(data[1]);
-                int dia = Integer.parseInt(data[0]);
-                LocalDate dataDeNascimento = LocalDate.of(ano, mes, dia);
-
-                Medico m = new Medico(Integer.valueOf(
-                        linhavetor[0]), linhavetor[1],
-                        linhavetor[2], linhavetor[3]
-                        , linhavetor[4],
-                        dataDeNascimento, especialidades);
-                med.add(m);
                 linha = br.readLine();
             }
+
             br.close();
+
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "DEU MERDA!!!");
+            JOptionPane.showConfirmDialog(
+                    null,
+                    "Ocorreu um erro ao abrir o arquivo",
+                    "Erro de leitura",
+                    JOptionPane.ERROR_MESSAGE);
+//            ex.printStackTrace();
         }
     }
 
+    public static DefaultTableModel getTableModel() {
+        Object[][] dados = new Object[medicoList.size()][3];
 
-public static DefaultTableModel getTableModel() {
-
-        
-        Object[][] dados = new Object[med.size()][3];
-
-        
         int i = 0;
-        for (Medico p : med) {
-            dados[i][0] = p.getCodigo();
-            dados[i][1] = p.getCrm();
-            dados[i][2] = p.getNome();
+        for (Medico m : medicoList) {
+            dados[i][0] = m.getCodigo();
+            dados[i][1] = m.getNome();
+            dados[i][2] = m.getNome();
             i++;
         }
 
-        String[] titulos = {"Código", "Crm", "Nome"};
-        DefaultTableModel tableModel = new DefaultTableModel(dados, titulos);
+        String[] titulos = {"Código", "Nome", "Telefone"};
 
+        DefaultTableModel tableModel = new DefaultTableModel(dados, titulos);
         return tableModel;
     }
+
 }
+
+//criar array
+//criar listmodel

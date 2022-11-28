@@ -158,17 +158,18 @@ public class PanelMedico extends javax.swing.JPanel {
     }//GEN-LAST:event_editarMouseClicked
 
     private void editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarActionPerformed
-        linha = tabMedicos.getSelectedRow();
+       linha = tabMedicos.getSelectedRow();
         if (linha != -1) {
             editar();
         } else {
             JOptionPane.showMessageDialog(
-                this,
-                "Selecione qual Médico você deseja editar!!",
-                "Meédicos",
-                JOptionPane.ERROR_MESSAGE);
+                    this,
+                    "Por favor, selecione um(a) medico(a) para alterar.",
+                    "Especialidade",
+                    JOptionPane.WARNING_MESSAGE);
         }
 
+        criarTabelaMedicos();
     }//GEN-LAST:event_editarActionPerformed
  private void editar() {
 
@@ -177,15 +178,11 @@ public class PanelMedico extends javax.swing.JPanel {
         DialogMedico dialogMedico = new DialogMedico(
                 null, 
                 true, 
-                TipoOperacao.ALTERAR,
-                null);
-                        
-
+                TipoOperacao.EDITAR, medico);
         dialogMedico.setVisible(true);
-        
         criarTabelaMedicos();
-
     }
+
     private void adicionarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_adicionarMouseClicked
 
     }//GEN-LAST:event_adicionarMouseClicked

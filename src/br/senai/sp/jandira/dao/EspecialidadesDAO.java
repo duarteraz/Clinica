@@ -1,7 +1,6 @@
 package br.senai.sp.jandira.dao;
 
 import br.senai.sp.jandira.model.Especialidade;
-import br.senai.sp.jandira.model.PlanoDeSaude;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,70 +10,68 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class EspecialidadesDAO {
 
-    private Especialidade especialidades;
-    private static ArrayList<Especialidade> especial = new ArrayList<>();
+    private Especialidade especialidade;
+    private static ArrayList<Especialidade> especialidadeList = new ArrayList<>();
 
-    private static final String ARQUIVO = "C:\\Users\\22282117\\projeto\\Especialidade.txt";
+    private static final String ARQUIVO = "C:\\Users\\22282117\\projeto\\especialidade.txt";
+    private static final String ARQUIVO_TEMP = "C:\\Users\\22282117\\projeto\\especialidade_temp.txt";
     private static final Path PATH = Paths.get(ARQUIVO);
-    private static final String ARQUIVO_TEMP = "C:\\Users\\22282117\\projeto\\Especialidade_Temp.txt";
     private static final Path PATH_TEMP = Paths.get(ARQUIVO_TEMP);
 
-    public EspecialidadesDAO(Especialidade especialidades) {
-        this.especial.add(especialidades);
+    public EspecialidadesDAO(Especialidade especialidade) {
+        this.especialidadeList.add(especialidade);
     }
 
     public EspecialidadesDAO() {
 
     }
 
-   public static void gravar(Especialidade especialidade) {
-        especial.add(especialidade);
+    public static void gravar(Especialidade especialidade) {
+        especialidadeList.add(especialidade);
 
         try {
-            BufferedWriter bw;
-            bw = Files.newBufferedWriter(
-                    PATH,
+            //Gravar o plano de saúde no arquivo texto
+            BufferedWriter bw = Files.newBufferedWriter(PATH,
                     StandardOpenOption.APPEND,
                     StandardOpenOption.WRITE);
 
-            String novaEspecialidade = especialidade.getEspecialidadePorPontoEVirgula();
-
-            bw.write(novaEspecialidade);
+            bw.write(especialidade.getEspecialidadeSeparadoPorPontoEVirgula());
             bw.newLine();
             bw.close();
 
-        } catch (IOException e) {
+        } catch (IOException ex) {
             JOptionPane.showMessageDialog(
                     null,
-                    "Houve um erro ao gravar o especialidade",
+                    "Ocorreu um erro ao gravar.\n\nEntre em contato com o suporte",
                     "Erro ao gravar",
                     JOptionPane.ERROR_MESSAGE);
-            
         }
 
     }
 
     public static boolean excluir(Integer codigo) {
-        for (Especialidade p : especial) {
-            if (p.getCodigo().equals(codigo)) {
-                especial.remove(p);
+
+        for (Especialidade esp : especialidadeList) {
+            if (esp.getCodigo().equals(codigo)) {
+                especialidadeList.remove(esp);
                 break;
             }
         }
 
         atualizarArquivo();
-        return false;
 
+        return false;
     }
 
-
     private static void atualizarArquivo() {
-
         File arquivoAtual = new File(ARQUIVO);
         File arquivoTemp = new File(ARQUIVO_TEMP);
 
@@ -87,8 +84,8 @@ public class EspecialidadesDAO {
                     StandardOpenOption.APPEND,
                     StandardOpenOption.WRITE);
 
-            for (Especialidade p : especial) {
-                bwTemp.write(p.getEspecialidadePorPontoEVirgula());
+            for (Especialidade e : especialidadeList) {
+                bwTemp.write(e.getEspecialidadeSeparadoPorPontoEVirgula());
                 bwTemp.newLine();
             }
 
@@ -99,99 +96,103 @@ public class EspecialidadesDAO {
             arquivoTemp.renameTo(arquivoAtual);
 
         } catch (IOException ex) {
-
             JOptionPane.showMessageDialog(
                     null,
-                    "Ocorreu um erro ao criar o arquivo!",
+                    "Ocorreu um erro ao criar o arquivo",
                     "Erro",
                     JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
+
         }
     }
 
-    public static Especialidade getDadosEspecialidade(Integer codigo) {
-
-        for (Especialidade especialidades : especial) {
-            if (especialidades.getCodigo().equals(codigo)) {
-                return especialidades;
+    public static Especialidade getEspecialidade(Integer codigo) {
+        for (Especialidade esp : especialidadeList) {
+            if (esp.getCodigo().equals(codigo)) {
+                return esp;
             }
         }
-
         return null;
     }
 
     public static void atualizar(Especialidade especialidade) {
-        for (Especialidade p : especial) {
-            if (p.getCodigo().equals(especialidade.getCodigo())) {
-                especial.set(especial.indexOf(p), especialidade);
+        for (Especialidade esp : especialidadeList) {
+            if (esp.getCodigo().equals(especialidade.getCodigo())) {
+                especialidadeList.set(especialidadeList.indexOf(esp), especialidade);
                 break;
             }
         }
 
-        atualizarArquivo();;
-    }
-    
-    public static Especialidade getEspecialidade(Integer codigo) {
-        for (Especialidade especialidade: especial) {
-            if (especialidade.getCodigo().equals(codigo)) {
-                return especialidade;
-            }
-        }
-        return null;
+        atualizarArquivo();
     }
 
     public static ArrayList<Especialidade> listarTodos() {
-        return especial;
+        return especialidadeList;
     }
 
-    public static void getListarEspecialidades() {
-    try {
+    public static void getListaEspecialidade() {
+
+        try {
+
             BufferedReader br = Files.newBufferedReader(PATH);
 
             String linha = br.readLine();
 
             while (linha != null && !linha.isEmpty()) {
                 String[] linhaVetor = linha.split(";");
-                Especialidade novaEspecialidade;
-                novaEspecialidade = new Especialidade(
+                Especialidade novaEspecialidade = new Especialidade(
                         Integer.valueOf(linhaVetor[0]),
                         linhaVetor[1],
                         linhaVetor[2]);
 
-                especial.add(novaEspecialidade);
+                especialidadeList.add(novaEspecialidade);
+
                 linha = br.readLine();
 
             }
 
             br.close();
 
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(
+        } catch (IOException ex) {
+            JOptionPane.showConfirmDialog(
                     null,
-                    "Houve um erro ao gravar",
-                    "Erro ao gravar",
+                    "Ocorreu um erro ao abrir o arquivo",
+                    "Erro ao ler o arquivo",
                     JOptionPane.ERROR_MESSAGE);
-            
         }
+
     }
 
     public static DefaultTableModel getTableModel() {
 
-        
-        Object[][] dados = new Object[especial.size()][3];
+        Object[][] dados = new Object[especialidadeList.size()][3];
 
-        
         int i = 0;
-        for (Especialidade p : especial) {
-            dados[i][0] = p.getCodigo();
-            dados[i][1] = p.getNome();
-            dados[i][2] = p.getDescricao();
+        for (Especialidade esp : especialidadeList) {
+            dados[i][0] = esp.getCodigo();
+            dados[i][1] = esp.getNome();
+            dados[i][2] = esp.getDescricao();
             i++;
         }
 
-        String[] titulos = {"Código", "Nome", "Descrição"};
+        String[] titulos = {"Código", "Especialidade", "Descrição"};
+
         DefaultTableModel tableModel = new DefaultTableModel(dados, titulos);
 
         return tableModel;
+
+    }
+
+    public static ArrayList<String> getListaDeNomes() {
+        ArrayList<String> dados = new ArrayList<>();
+        for (Especialidade e : especialidadeList) {
+            dados.add(e.getNome());
+        }
+        DefaultListModel<String> ListaModel = new DefaultListModel<>();
+
+        ListaModel.addAll(dados);
+
+        return dados;
+
     }
 }
+

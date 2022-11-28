@@ -23,7 +23,7 @@ public class DialogPlanosDeSaude extends javax.swing.JDialog {
         this.planoDeSaude = planoDeSaude;
 
         // Preencher os campos, caso o tipo de operação for ALTERAR
-        if (tipoOperacao == TipoOperacao.ALTERAR) {
+        if (tipoOperacao == TipoOperacao.EDITAR) {
             preencherFormulario();
         }
 

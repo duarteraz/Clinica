@@ -181,6 +181,7 @@ public class PanelEspecialidades extends javax.swing.JPanel {
         dialogEspecialidade.setVisible(true);
 
         criarTabelaEspecialidades();
+        
 
     }
 

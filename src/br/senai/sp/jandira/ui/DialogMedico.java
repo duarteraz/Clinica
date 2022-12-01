@@ -49,6 +49,38 @@ public class DialogMedico extends javax.swing.JDialog {
         textCodigo1.setText(medico.getCodigo().toString());
         textNome.setText(medico.getNome());
         textTelefone.setText(medico.getTelefone());
+         textCrm.setText(medico.getCrm());
+        textEmail.setText(medico.getEmail());
+        textTelefone.setText(medico.getTelefone());
+        textData.setText(medico.getDataNascimento());
+
+    }
+    private void atualizarListasEspecialidades() {
+
+        especialidades = EspecialidadesDAO.getListaDeNomes();
+        listaDasEspecialidades.addAll(especialidades);
+        listTodos.setModel(listaDasEspecialidades);
+        
+        if (tipoOperacao == TipoOperacao.ADICIONAR) {
+
+        } else {
+            especialidadesSelecionadas = medico.getEspecialidades();
+            selecionadas = medico.getListaDeEspecialidadesDoMedico();
+            listaDasEspecialidadesDoMedico.clear();
+            listaDasEspecialidadesDoMedico.addAll(selecionadas);
+            listSelecionados.setModel(listaDasEspecialidadesDoMedico);
+
+            int i = 0;
+            
+            for (String e : selecionadas) {
+                if (especialidades.contains(e)) {
+                    especialidades.remove(e);
+                }
+            }
+            listaDasEspecialidades.clear();
+            listaDasEspecialidades.addAll(especialidades);
+
+        }
 
     }
 
@@ -280,7 +312,7 @@ public class DialogMedico extends javax.swing.JDialog {
     }//GEN-LAST:event_textDataActionPerformed
 
     private void adicionarEspecialidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarEspecialidadeActionPerformed
-        List<String> especialidadesDoMedico = listTodos.getSelectedValuesList();
+        java.util.List<String> especialidadesDoMedico = listTodos.getSelectedValuesList();
 
         for (String e : especialidadesDoMedico) {
             selecionadas.add(e);
@@ -301,12 +333,10 @@ public class DialogMedico extends javax.swing.JDialog {
             especialidades.remove(e);
 
         }
-
-
     }//GEN-LAST:event_adicionarEspecialidadeActionPerformed
 
     private void removerEspecialidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerEspecialidadeActionPerformed
-        List<String> removerEspecialidades = listSelecionados.getSelectedValuesList();
+java.util.List<String> removerEspecialidades = listSelecionados.getSelectedValuesList();
 
         for (String e : removerEspecialidades) {
             especialidades.add(e);
@@ -321,17 +351,16 @@ public class DialogMedico extends javax.swing.JDialog {
         listaDasEspecialidades.addAll(especialidades);
         listTodos.setModel(listaDasEspecialidades);
 
-        int[] excluir = listTodos.getSelectedIndices();
+        int[] excluir = listSelecionados.getSelectedIndices();
         for (int e : excluir) {
             listaDasEspecialidadesDoMedico.remove(e);
             selecionadas.remove(e);
         }
      }//GEN-LAST:event_removerEspecialidadeActionPerformed
 
-    private void atualizar() {
+      private void atualizar() {
         medico.setNome(textNome.getText());
         medico.setTelefone(textTelefone.getText());
-        medico.setDataNascimento(dataCorreta());
         medico.setEspecialidade(especialidadesSelecionadas);
         MedicoDAO.atualizar(medico);
 
@@ -353,6 +382,10 @@ public class DialogMedico extends javax.swing.JDialog {
         Medico medico = new Medico();
         medico.setNome(textNome.getText());
         medico.setTelefone(textTelefone.getText());
+         medico.setCrm(textCrm.getText());
+        medico.setEmail(textEmail.getText());
+        medico.setDataNascimento(textData.getText());
+        medico.setEspecialidades(especialidadesSelecionadas);
 
         if (validarCadastro()) {
             MedicoDAO.gravar(medico);
@@ -422,37 +455,6 @@ public class DialogMedico extends javax.swing.JDialog {
     private javax.swing.JTextField textTelefone;
     private javax.swing.JLabel titulo;
     // End of variables declaration//GEN-END:variables
-private LocalDate dataCorreta() {
-        String[] data = textData.getText().split("/");
 
-        return LocalDate.of(Integer.parseInt(data[2]), Integer.parseInt(data[1]), Integer.parseInt(data[0]));
-
-    }
-
-    private void atualizarListasEspecialidades() {
-        especialidades = EspecialidadesDAO.getListaDeNomes();
-        listaDasEspecialidades.addAll(especialidades);
-        listTodos.setModel(listaDasEspecialidades);
-        if (tipoOperacao == TipoOperacao.ADICIONAR) {
-
-        } else {
-            especialidadesSelecionadas = medico.getEspecialidade();
-            selecionadas = medico.getListaDeEspecialidadesDoMedico();
-            listaDasEspecialidadesDoMedico.clear();
-            listaDasEspecialidadesDoMedico.addAll(selecionadas);
-            listSelecionados.setModel(listaDasEspecialidadesDoMedico);
-
-            int i = 0;
-            for (String e : selecionadas) {
-                if (especialidades.contains(e)) {
-                    especialidades.remove(e);
-                }
-            }
-            listaDasEspecialidades.clear();
-            listaDasEspecialidades.addAll(especialidades);
-
-        }
-
-    }
 
 }

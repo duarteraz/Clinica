@@ -5,72 +5,93 @@ import javax.swing.DefaultListModel;
 
 public class Medico extends Pessoa {
 
-    private static int contador = 100;
-    private String crm;
-    private ArrayList<Especialidade> especialidades;
-    private Integer codigo;
+	private static int contador = 100;
+	private String crm;
+	private ArrayList<Especialidade> especialidades;
+	private Integer codigo;
 
-    public ArrayList<Especialidade> getEspecialidade() {
-        return especialidades;
-    }
+	public ArrayList<Especialidade> getEspecialidades() {
+		return especialidades;
+	}
 
-    public ArrayList<String> getListaDeEspecialidadesDoMedico() {
-        ArrayList<String> dados = new ArrayList<>();
-        for (Especialidade e : especialidades) {
-            dados.add(e.getNome());
-        }
-        DefaultListModel<String> ListaModel = new DefaultListModel<>();
+	public String getEspecialidadesStr() {
+		return especialidades.toString();
+	}
 
-        ListaModel.addAll(dados);
+	public void setEspecialidades(ArrayList<Especialidade> especialidades) {
+		this.especialidades = especialidades;
+	}
 
-        return dados;
+	public Medico() {
+		atualizarCodigo();
+	}
 
-    }
+	public Medico(String nome, String telefone) {
+		getNome();
+		getTelefone();
+		atualizarCodigo();
+	}
 
-    public Medico() {
-        atualizarCodigo();
-    }
+	public Medico(Integer codigo, String nome, String crm, String telefone, String email, String dataNascimento,
+			ArrayList<Especialidade> especialidades) {
 
-    public Medico(String nome, String telefone) {
-        getNome();
-        getTelefone();
-        atualizarCodigo();
-    }
+		this.codigo = codigo;
+		super.setNome(nome);
+		this.crm = crm;
+		super.setTelefone(telefone);
+		super.setEmail(email);
+		super.setDataNascimento(dataNascimento);
+		this.especialidades = especialidades;
+		this.contador = codigo;
+	}
 
-    public Medico(Integer codigo, String nome, String telefone) {
-        this.codigo = codigo;
-        super.setNome(nome);
-        super.setTelefone(telefone);
-        this.contador = this.codigo;
-    }
+	public void setEspecialidade(ArrayList<Especialidade> especialidade) {
+		this.especialidades = especialidade;
+	}
 
-    public void setEspecialidade(ArrayList<Especialidade> especialidade) {
-        this.especialidades = especialidade;
-    }
+	public String getCrm() {
+		return crm;
+	}
 
-    public String getCrm() {
-        return crm;
-    }
+	public void setCrm(String crm) {
+		this.crm = crm;
+	}
 
-    public void setCrm(String crm) {
-        this.crm = crm;
-    }
+	public static int getContador() {
+		return contador;
+	}
 
-    public static int getContador() {
-        return contador;
-    }
+	private void atualizarCodigo() {
+		contador++;
+		this.codigo = contador;
+	}
 
-    private void atualizarCodigo() {
-        contador++;
-        this.codigo = contador;
-    }
+	public Integer getCodigo() {
+		return codigo;
+	}
 
-    public Integer getCodigo() {
-        return codigo;
-    }
+	public String getMedicoSeparadoPorPontoEVirgula() {
 
-    public String getMedicoSeparadoPorPontoEVirgula() {
-        return this.codigo + ";" + super.getNome() + ";" + super.getTelefone();
-    }
+		String getCodigoEspecialidades = "";
+		for (Especialidade e : especialidades) {
+			getCodigoEspecialidades += e.getCodigo() + ";";
+		}
+		return this.codigo + ";" + this.getNome() + ";" + this.crm + ";" + 
+		super.getTelefone() + ";" + super.getEmail()+ ";" + 
+		super.getDataNascimento() + ";" + getCodigoEspecialidades;
+	}
+
+	public ArrayList<String> getListaDeEspecialidadesDoMedico() {
+		ArrayList<String> dados = new ArrayList<>();
+		for (Especialidade e : especialidades) {
+			dados.add(e.getNome());
+		}
+		DefaultListModel<String> ListaModel = new DefaultListModel<>();
+
+		ListaModel.addAll(dados);
+
+		return dados;
+
+	}
 
 }

@@ -19,72 +19,96 @@ import javax.swing.table.DefaultTableModel;
 public class EspecialidadesDAO {
 
     private Especialidade especialidade;
-    private static ArrayList<Especialidade> especialidadeList = new ArrayList<>();
+    private static ArrayList<Especialidade> especialidades = new ArrayList<>();
 
     private static final String ARQUIVO = "C:\\Users\\22282117\\projeto\\especialidade.txt";
     private static final String ARQUIVO_TEMP = "C:\\Users\\22282117\\projeto\\especialidade_temp.txt";
     private static final Path PATH = Paths.get(ARQUIVO);
     private static final Path PATH_TEMP = Paths.get(ARQUIVO_TEMP);
 
-    public EspecialidadesDAO(Especialidade especialidade) {
-        this.especialidadeList.add(especialidade);
-    }
+public EspecialidadesDAO(Especialidade especialidade) {
+        this.especialidades.add(especialidade);
+    } //construtor criado
 
     public EspecialidadesDAO() {
-
-    }
+    }//construtor root
 
     public static void gravar(Especialidade especialidade) {
-        especialidadeList.add(especialidade);
 
         try {
-            //Gravar o plano de saúde no arquivo texto
-            BufferedWriter bw = Files.newBufferedWriter(PATH,
+            BufferedWriter bw = Files.newBufferedWriter(
+                    PATH,
                     StandardOpenOption.APPEND,
-                    StandardOpenOption.WRITE);
+                    StandardOpenOption.WRITE
+            );
 
-            bw.write(especialidade.getEspecialidadeSeparadoPorPontoEVirgula());
+            String novaEspecialidade = especialidade.getEspecialidadeSeparadoPorPontoEVirgula();
+
+            bw.write(novaEspecialidade);
             bw.newLine();
             bw.close();
 
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Ocorreu um erro ao gravar.\n\nEntre em contato com o suporte",
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    "O um erro ao gravar. \n\nEntre em contato com o suporte. \n\n TEL: 3666-3666",
                     "Erro ao gravar",
                     JOptionPane.ERROR_MESSAGE);
-        }
 
+        }
+        especialidades.add(especialidade);
+
+    }
+
+    public static Especialidade getEspecialidade(Integer codigo) {
+
+        for (Especialidade e : especialidades) {
+            if (e.getCodigo().equals(codigo)) {
+                return e;
+            }
+        }
+        return null;
+    }
+
+    public static void atualizar(Especialidade especialidade) {
+        for (Especialidade e : especialidades) {
+            if (e.getCodigo().equals(especialidade.getCodigo())) {
+                especialidades.set(especialidades.indexOf(e), especialidade);
+                break;
+            }
+        }
+        atualizarArquivo();
     }
 
     public static boolean excluir(Integer codigo) {
 
-        for (Especialidade esp : especialidadeList) {
-            if (esp.getCodigo().equals(codigo)) {
-                especialidadeList.remove(esp);
+        for (Especialidade e : especialidades) {
+
+            if (e.getCodigo().equals(codigo)) {
+                especialidades.remove(e);
                 break;
             }
         }
-
         atualizarArquivo();
 
         return false;
     }
 
     private static void atualizarArquivo() {
+        //reconstruir um arquivo atualizado
+        //sem o plano removido
+        //PASSO 01 - Criando uma representação dos arquivos a serem manipulados
         File arquivoAtual = new File(ARQUIVO);
         File arquivoTemp = new File(ARQUIVO_TEMP);
 
         try {
-
-            arquivoTemp.createNewFile();
+            boolean criou = arquivoTemp.createNewFile();
 
             BufferedWriter bwTemp = Files.newBufferedWriter(
                     PATH_TEMP,
                     StandardOpenOption.APPEND,
                     StandardOpenOption.WRITE);
 
-            for (Especialidade e : especialidadeList) {
+            for (Especialidade e : especialidades) {
                 bwTemp.write(e.getEspecialidadeSeparadoPorPontoEVirgula());
                 bwTemp.newLine();
             }
@@ -92,99 +116,70 @@ public class EspecialidadesDAO {
             bwTemp.close();
 
             arquivoAtual.delete();
-
             arquivoTemp.renameTo(arquivoAtual);
 
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(
+            JOptionPane.showConfirmDialog(
                     null,
                     "Ocorreu um erro ao criar o arquivo",
                     "Erro",
                     JOptionPane.ERROR_MESSAGE);
-
         }
-    }
-
-    public static Especialidade getEspecialidade(Integer codigo) {
-        for (Especialidade esp : especialidadeList) {
-            if (esp.getCodigo().equals(codigo)) {
-                return esp;
-            }
-        }
-        return null;
-    }
-
-    public static void atualizar(Especialidade especialidade) {
-        for (Especialidade esp : especialidadeList) {
-            if (esp.getCodigo().equals(especialidade.getCodigo())) {
-                especialidadeList.set(especialidadeList.indexOf(esp), especialidade);
-                break;
-            }
-        }
-
-        atualizarArquivo();
     }
 
     public static ArrayList<Especialidade> listarTodos() {
-        return especialidadeList;
+        return especialidades;
     }
 
     public static void getListaEspecialidade() {
 
         try {
-
             BufferedReader br = Files.newBufferedReader(PATH);
 
-            String linha = br.readLine();
+            String linha = "";
+
+            linha = br.readLine();
 
             while (linha != null && !linha.isEmpty()) {
                 String[] linhaVetor = linha.split(";");
-                Especialidade novaEspecialidade = new Especialidade(
+                Especialidade especialidade = new Especialidade(
                         Integer.valueOf(linhaVetor[0]),
                         linhaVetor[1],
                         linhaVetor[2]);
-
-                especialidadeList.add(novaEspecialidade);
-
+                especialidades.add(especialidade);
                 linha = br.readLine();
-
             }
 
             br.close();
 
-        } catch (IOException ex) {
-            JOptionPane.showConfirmDialog(
-                    null,
-                    "Ocorreu um erro ao abrir o arquivo",
-                    "Erro ao ler o arquivo",
-                    JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro para essa ação");
+
         }
 
     }
 
     public static DefaultTableModel getTableModel() {
 
-        Object[][] dados = new Object[especialidadeList.size()][3];
+        Object[][] dados = new Object[especialidades.size()][3];
 
         int i = 0;
-        for (Especialidade esp : especialidadeList) {
-            dados[i][0] = esp.getCodigo();
-            dados[i][1] = esp.getNome();
-            dados[i][2] = esp.getDescricao();
+        for (Especialidade e : especialidades) {
+            dados[i][0] = e.getCodigo();
+            dados[i][1] = e.getNome();
+            dados[i][2] = e.getDescricao();
             i++;
         }
-
-        String[] titulos = {"Código", "Especialidade", "Descrição"};
+        String[] titulos = {"Código", "Nome Da Especialidade", "Descrição"};
 
         DefaultTableModel tableModel = new DefaultTableModel(dados, titulos);
 
         return tableModel;
-
     }
 
     public static ArrayList<String> getListaDeNomes() {
         ArrayList<String> dados = new ArrayList<>();
-        for (Especialidade e : especialidadeList) {
+        for (Especialidade e : especialidades) {
             dados.add(e.getNome());
         }
         DefaultListModel<String> ListaModel = new DefaultListModel<>();
@@ -195,4 +190,3 @@ public class EspecialidadesDAO {
 
     }
 }
-

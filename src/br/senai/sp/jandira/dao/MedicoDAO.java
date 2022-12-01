@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.dao;
 
+import br.senai.sp.jandira.model.Especialidade;
 import br.senai.sp.jandira.model.Medico;
 import br.senai.sp.jandira.model.Pessoa;
 import java.io.BufferedReader;
@@ -129,36 +130,47 @@ public class MedicoDAO extends Pessoa{
         return medicoList;
     }
 
-    public static void getListaMedicos() {
+
+  public static void getListaMedicos() {
 
         try {
-            // Abrir o arquivo para leitura - Leitor
-
             BufferedReader br = Files.newBufferedReader(PATH);
 
-            String linha = br.readLine();
+            String linha = "";
+
+            linha = br.readLine();
 
             while (linha != null && !linha.isEmpty()) {
                 String[] linhaVetor = linha.split(";");
-                Medico novoMedico = new Medico(
-                  Integer.valueOf(linhaVetor[0]),
-                        linhaVetor[1],
-                        linhaVetor[2]);
 
-                medicoList.add(novoMedico);
+                ArrayList<Especialidade> especialidades = new ArrayList<>();
+                int i = 0;
 
+                while (linhaVetor.length > i + 6) {
+                especialidades.add(EspecialidadesDAO.getEspecialidade(Integer.valueOf(linhaVetor[6+i])));
+                    i++;
+                }
+
+                Medico medico = new Medico(
+                        Integer.valueOf(linhaVetor[0]), //codigo
+                        linhaVetor[1], // nome
+                        linhaVetor[2], // crm
+                        linhaVetor[3], // telefone
+                        linhaVetor[4], // email
+                        linhaVetor[5], //data de nascimento.
+                        especialidades
+                );
+
+                medicoList.add(medico);
                 linha = br.readLine();
             }
 
             br.close();
-
-        } catch (IOException ex) {
-            JOptionPane.showConfirmDialog(
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
                     null,
-                    "Ocorreu um erro ao abrir o arquivo",
-                    "Erro de leitura",
-                    JOptionPane.ERROR_MESSAGE);
-//            ex.printStackTrace();
+                    "Ocorreu um erro na leitura do arquvo");
+
         }
     }
 
@@ -169,7 +181,7 @@ public class MedicoDAO extends Pessoa{
         for (Medico m : medicoList) {
             dados[i][0] = m.getCodigo();
             dados[i][1] = m.getNome();
-            dados[i][2] = m.getNome();
+            dados[i][2] = m.getTelefone();
             i++;
         }
 
